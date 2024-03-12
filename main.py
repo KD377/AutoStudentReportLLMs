@@ -1,32 +1,51 @@
-from docx import Document
+import chromadb
+from chromadb.utils import embedding_functions
+import FileReader as fr
+# import nltk
+# from nltk import sent_tokenize
+#
+# nltk.download("punkt")
 
+CHROMA_DATA_PATH = "chroma_data/"
+EMBED_MODEL = "all-MiniLM-L6-v2"
+COLLECTION_NAME = "demo_docs"
 
-def read_docx_file(file_path):
-    doc = Document(file_path)
-    content = []
-    for paragraph in doc.paragraphs:
-        content.append(paragraph.text)
-    return content
+# Only for tests in the future we want
+# PersistentClient() to write data to DATA_PATH :)
+client = chromadb.Client()
 
-def split_document_into_sections(content, patterns):
-    sections = {}
-    current_section = None
+embedding_func = embedding_functions.DefaultEmbeddingFunction()
 
-    for line in content:
-        if line.strip() in patterns:
-            current_section = line.strip()
-            sections[current_section] = []
-        elif current_section is not None:
-            sections[current_section].append(line)
+collection = client.create_collection(
+    name=COLLECTION_NAME,
+    embedding_function=embedding_func,
+    metadata={"hnsw:space": "cosine"},
+)
 
-    return sections
 
 section_start_pattern = (
     "Title:",
     "1. Experiment aim:",
-    "2. Theoretical background: ",
-    "3. Research: ",
+    "2. Theoretical background:",
+    "3. Research:",
     "4. Conclusions:"
 )
 
-file_path = "./reports/reportsC/expC_no2.docx"
+path = "./reports/reportsC/expC_no2.docx"
+
+
+documents, section_names = fr.read_file(path, section_start_pattern)
+
+
+collection.add(
+    documents=documents,
+    ids=[f"id{i}" for i in range(len(documents))],
+    metadatas=[{"section": s} for s in section_names]
+)
+
+query_results = collection.query(
+    query_texts=["what is the aim of the report"],
+    n_results=2,
+)
+
+print(query_results)

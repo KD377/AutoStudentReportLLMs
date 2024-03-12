@@ -3,4 +3,4 @@ The "AutoStudentReportLLMs" repo features a complete implementation for automate
 
 ## Run the project for the first time
 - create venv directory
-- run ~pip install python-docx chromadb
+- run: pip install python-docx chromadb
