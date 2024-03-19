@@ -36,18 +36,19 @@ section_start_pattern = (
 path = "./reports/reportsC/expC_no2.docx"
 
 
-fr.read_file(path, section_start_pattern)
+documents, metadatas = fr.read_file(path, section_start_pattern,3)
 
-# collection.add(
-#     documents=documents,
-#     ids=[f"id{i}" for i in range(len(documents))],
-#     metadatas=[{"section": s} for s in section_names]
-# )
-#
-# query_results = collection.query(
-#     query_texts=["Tell me about logs"],
-#     where={"section": {"$eq": "3. Research:"}},
-#     n_results=2,
-# )
-#
-# print(query_results)
+print(documents)
+
+collection.add(
+    documents=documents,
+    ids=[f"id{i}" for i in range(len(documents))],
+    metadatas=metadatas
+)
+
+query_results = collection.query(
+    query_texts=["What is the aim of the experiment?"],
+    n_results=2
+)
+
+print(query_results)

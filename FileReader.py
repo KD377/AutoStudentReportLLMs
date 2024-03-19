@@ -1,5 +1,5 @@
 from docx import Document
-
+import re
 
 def read_docx_file(file_path):
     doc = Document(file_path)
@@ -49,15 +49,52 @@ def extract_exercises(sections, exercise_number):
     return exercises
 
 
-def read_file(file_path, patterns):
+def read_file(file_path, patterns, number_of_exercises):
     sections = split_document_into_sections(read_docx_file(file_path), patterns)
-    print(extract_exercises(sections, 3))
-    # documents = []
-    # section_names = []
-    #
-    # for section_name, sentences in sections.items():
-    #     for sentence in sentences:
-    #         cleaned_sentence = remove_non_ascii(sentence)
-    #         documents.append(cleaned_sentence)
-    #         section_names.append(section_name)
-    # return documents, section_names
+
+    exercises = extract_exercises(sections, number_of_exercises)
+
+    del sections["3. Research:"]
+    sections.update(exercises)
+    # metadatass = {
+    #     "Section_name": [],
+    #     "Global_sentence_number": [],
+    #     "Local_sentence_number": [],
+    #     "Type": [],
+    #     "Exercise_number": [] # 0 if not exercise ssection
+    # }
+
+    metadatas = []
+    pattern = r'Ex\. (?:[1-9]|[1-9][0-9])\.'
+
+    documents = []
+    i, j = 0, 0
+    for section_name, sentences in sections.items():
+        j = 0
+        for sentence in sentences:
+            cleaned_sentence = remove_non_ascii(sentence)
+            documents.append(cleaned_sentence)
+            meta = {}
+            #Check if it is Ex. num. section and atach proper meta
+            if re.findall(pattern, section_name):
+                meta["Section_name"] = "3. Research:"
+
+                # Extraction of the number from the section_name
+                parts = section_name.split(".")
+                if len(parts) == 3 and parts[0] == "Ex" and parts[1].strip().isdigit():
+                    number = int(parts[1].strip())
+                    meta["Exercise_number"] = number
+                meta["Type"] = "Exercise"
+            else:
+                meta["Exercise_number"] = 0
+                meta["Section_name"] = section_name
+                meta["Type"] = "Description"
+
+            meta["Global_sentence_number"] = i
+            meta["Local_sentence_number"] = j
+
+            metadatas.append(meta)
+
+            j += 1
+            i += 1
+    return documents, metadatas
