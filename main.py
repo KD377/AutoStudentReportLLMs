@@ -1,28 +1,12 @@
+import chromaManager as db
+import FileReader as fr
 import chromadb
 from chromadb.utils import embedding_functions
-import FileReader as fr
-# import nltk
-# from nltk import sent_tokenize
-#
-# nltk.download("punkt")
+import openai
 
-CHROMA_DATA_PATH = "chroma_data/"
+CHROMA_DATA_PATH = "chroma_data"
 EMBED_MODEL = "sentence-transformers/paraphrase-MiniLM-L6-v2"
 COLLECTION_NAME = "demo_docs"
-
-# Only for tests in the future we want
-# PersistentClient() to write data to DATA_PATH :)
-client = chromadb.Client()
-
-embedding_func = embedding_functions.SentenceTransformerEmbeddingFunction(
-    model_name=EMBED_MODEL
-)
-
-collection = client.create_collection(
-    name=COLLECTION_NAME,
-    embedding_function=embedding_func,
-    metadata={"hnsw:space": "cosine"},
-)
 
 
 section_start_pattern = (
@@ -36,19 +20,28 @@ section_start_pattern = (
 path = "./reports/reportsC/expC_no2.docx"
 
 
-documents, metadatas = fr.read_file(path, section_start_pattern,3)
+#documents, metadatas = fr.read_file(path, section_start_pattern,3)
 
-print(documents)
 
-collection.add(
-    documents=documents,
-    ids=[f"id{i}" for i in range(len(documents))],
-    metadatas=metadatas
+# db.build_chroma_collection(
+#     CHROMA_DATA_PATH,
+#     COLLECTION_NAME,
+#     EMBED_MODEL,
+#     documents,
+#     metadatas
+# )
+
+client = chromadb.PersistentClient(CHROMA_DATA_PATH)
+embedding_func = embedding_functions.SentenceTransformerEmbeddingFunction(
+        model_name=EMBED_MODEL
+    )
+collection = client.get_collection(name=COLLECTION_NAME, embedding_function=embedding_func)
+
+great_reviews = collection.query(
+    query_texts=["Find me something how file permissions works on Linux"],
+    n_results=5,
+    include=["documents", "distances", "metadatas"]
 )
 
-query_results = collection.query(
-    query_texts=["What is the aim of the experiment?"],
-    n_results=2
-)
+print(great_reviews["documents"])
 
-print(query_results)
