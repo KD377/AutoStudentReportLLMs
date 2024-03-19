@@ -7,14 +7,16 @@ import FileReader as fr
 # nltk.download("punkt")
 
 CHROMA_DATA_PATH = "chroma_data/"
-EMBED_MODEL = "all-MiniLM-L6-v2"
+EMBED_MODEL = "sentence-transformers/paraphrase-MiniLM-L6-v2"
 COLLECTION_NAME = "demo_docs"
 
 # Only for tests in the future we want
 # PersistentClient() to write data to DATA_PATH :)
 client = chromadb.Client()
 
-embedding_func = embedding_functions.DefaultEmbeddingFunction()
+embedding_func = embedding_functions.SentenceTransformerEmbeddingFunction(
+    model_name=EMBED_MODEL
+)
 
 collection = client.create_collection(
     name=COLLECTION_NAME,
@@ -34,18 +36,18 @@ section_start_pattern = (
 path = "./reports/reportsC/expC_no2.docx"
 
 
-documents, section_names = fr.read_file(path, section_start_pattern)
+fr.read_file(path, section_start_pattern)
 
-
-collection.add(
-    documents=documents,
-    ids=[f"id{i}" for i in range(len(documents))],
-    metadatas=[{"section": s} for s in section_names]
-)
-
-query_results = collection.query(
-    query_texts=["what is the aim of the report"],
-    n_results=2,
-)
-
-print(query_results)
+# collection.add(
+#     documents=documents,
+#     ids=[f"id{i}" for i in range(len(documents))],
+#     metadatas=[{"section": s} for s in section_names]
+# )
+#
+# query_results = collection.query(
+#     query_texts=["Tell me about logs"],
+#     where={"section": {"$eq": "3. Research:"}},
+#     n_results=2,
+# )
+#
+# print(query_results)
