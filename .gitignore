@@ -3,3 +3,5 @@ venv/
 
 .DS_Store
 .idea/
+chroma_data/
+*chroma_data/
