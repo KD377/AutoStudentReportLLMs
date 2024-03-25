@@ -20,6 +20,8 @@ def split_document_into_sections(content, patterns):
                 sections[current_section] = []
                 if current_section == "Title:":
                     sections[current_section].append(line[len("Title:"):].strip())
+                elif current_section == "Author:":
+                    sections[current_section].append(line[len("Author:"):].strip())
                 break
         else:
             if current_section is not None and line.strip():
@@ -53,7 +55,6 @@ def read_file(file_path, patterns, number_of_exercises):
     sections = split_document_into_sections(read_docx_file(file_path), patterns)
 
     exercises = extract_exercises(sections, number_of_exercises)
-
     del sections["3. Research:"]
     sections.update(exercises)
     # metadatass = {
@@ -63,18 +64,27 @@ def read_file(file_path, patterns, number_of_exercises):
     #     "Type": [],
     #     "Exercise_number": [] # 0 if not exercise ssection
     # }
-
     metadatas = []
     pattern = r'Ex\. (?:[1-9]|[1-9][0-9])\.'
 
     documents = []
+
+    student_answer = False
     i, j = 0, 0
+    current_section = None
     for section_name, sentences in sections.items():
         j = 0
+        if section_name != current_section:
+            student_answer = False
+            current_section = section_name
         for sentence in sentences:
             cleaned_sentence = remove_non_ascii(sentence)
             documents.append(cleaned_sentence)
             meta = {}
+
+            if sentence.strip().startswith("Student’s answer:"):
+                student_answer = True
+
             #Check if it is Ex. num. section and atach proper meta
             if re.findall(pattern, section_name):
                 meta["Section_name"] = "3. Research:"
@@ -84,12 +94,15 @@ def read_file(file_path, patterns, number_of_exercises):
                 if len(parts) == 3 and parts[0] == "Ex" and parts[1].strip().isdigit():
                     number = int(parts[1].strip())
                     meta["Exercise_number"] = number
-                meta["Type"] = "Exercise"
+
             else:
                 meta["Exercise_number"] = 0
                 meta["Section_name"] = section_name
-                meta["Type"] = "Description"
 
+            if student_answer:
+                meta["Type"] = "answer"
+            else:
+                meta["Type"] = "description"
             meta["Global_sentence_number"] = i
             meta["Local_sentence_number"] = j
 
