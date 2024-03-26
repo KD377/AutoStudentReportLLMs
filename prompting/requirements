@@ -1,0 +1,14 @@
+You will be given the title and one of the tasks of the student's report.
+
+Your task is to generate grading criteria based on your knowledge.
+
+The tasks will be graded on the scale from 0-5 points.
+
+Based on your knowledge and the task description I want you to come up with the criteria of grading. In other words what is required in the answer to get points.
+What you need to have to get 1 point what to get 2 point etc.
+
+
+Report Title: {}
+
+Task: {}
+

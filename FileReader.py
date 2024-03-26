@@ -18,6 +18,7 @@ def split_document_into_sections(content, patterns):
             if line.strip().startswith(pattern):
                 current_section = pattern
                 sections[current_section] = []
+                sections[current_section].append(current_section)
                 if current_section == "Title:":
                     sections[current_section].append(line[len("Title:"):].strip())
                 elif current_section == "Author:":
@@ -57,13 +58,6 @@ def read_file(file_path, patterns, number_of_exercises):
     exercises = extract_exercises(sections, number_of_exercises)
     del sections["3. Research:"]
     sections.update(exercises)
-    # metadatass = {
-    #     "Section_name": [],
-    #     "Global_sentence_number": [],
-    #     "Local_sentence_number": [],
-    #     "Type": [],
-    #     "Exercise_number": [] # 0 if not exercise ssection
-    # }
     metadatas = []
     pattern = r'Ex\. (?:[1-9]|[1-9][0-9])\.'
 

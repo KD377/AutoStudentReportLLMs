@@ -3,6 +3,7 @@ import FileReader as fr
 import chromadb
 from chromadb.utils import embedding_functions
 from openai import OpenAI
+from llmmodel import LLMModel
 
 CHROMA_DATA_PATH = "chroma_data"
 EMBED_MODEL = "sentence-transformers/paraphrase-MiniLM-L6-v2"
@@ -23,14 +24,14 @@ path = "./reports/reportsC/expC_no2.docx"
 #UNCOMMENT THIS SECTION IF RUNNING FOR THE FIRST TIME
 documents, metadatas = fr.read_file(path, section_start_pattern,3)
 
-current_section = None
 for i in range(len(documents)):
-    if metadatas[i]["Type"] == "answer":
-        if current_section != metadatas[i]["Section_name"]:
-            current_section = metadatas[i]["Section_name"]
-            print(metadatas[i]["Section_name"] + "\n")
-        print(documents[i] +" "+ metadatas[i]["Type"])
+    if metadatas[i]["Section_name"] == "Title:":
+        title = documents[i]
 
+model = LLMModel("http://localhost:1234/v1", "lm-studio","./prompting")
+# model.generate_grading_requirements(documents, metadatas,title,3)
+#model.generate_queries(documents, metadatas, 3) to nie dziala
+# model.generate_grading_requirements(docs, meta, title)
 # db.build_chroma_collection(
 #     CHROMA_DATA_PATH,
 #     COLLECTION_NAME,
