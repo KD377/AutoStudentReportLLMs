@@ -1,0 +1,14 @@
+Grading Criteria:
+
+* Creating a new user named "TestUser" on the Linux system - 1 point (This task is essential to complete the report.)
+* Adding "TestUser" to a group named "SecureGroup." - 1 point (This task is required to ensure that the user has access to the relevant files.)
+* Ensuring that "SecureGroup" has read and write access to all files inside the "SecureFiles" directory. - 2 points (This task demonstrates a thorough understanding of file permissions and group management in Linux.)
+* Logging in as "TestUser" and attempting to modify "file3.txt" inside the "SecureFiles" directory. - 1 point (This task tests the user's ability to access and modify files in a secure environment.)
+
+Grading Schema:
+
+* 5 points: Exceptional work that demonstrates a deep understanding of the subject matter.
+* 4 points: Excellent work that demonstrates a strong understanding of the subject matter.
+* 3 points: Good work that demonstrates an understanding of the subject matter.
+* 2 points: Fair work that demonstrates a basic understanding of the subject matter.
+* 1 point: Poor work that fails to demonstrate a basic understanding of the subject matter.

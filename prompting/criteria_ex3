@@ -1,0 +1,7 @@
+
+#### Grading Criteria:
+
+* 5 Points: The student has successfully logged and monitored file access in the "SecureFiles" directory by following the given steps and providing evidence of their success.
+	+ 3 Points: The student has correctly enabled file access logging for the "SecureFiles" directory, created a log file to record all file access events and provided the correct path to the log file.
+	+ 2 Points: The student was able to successfully access "file1.txt" from another user account and check the log file for recorded events.
+	+ 0 Points: The student failed to follow any or all of the given steps, or were unable to provide evidence of their success.

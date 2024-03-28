@@ -1,0 +1,29 @@
+{
+    "Task Completion": [
+        "What is the name of the new directory you created?",
+        "How many text files were created inside 'SecureFiles' directory?"
+    ],
+
+    "Chmod Commands Used Correctly": [
+        "Which chmod command was used to set read, write, and execute permissions for the owner and others on 'file1.txt'?",
+        "What chmod commands were used to set read and write permissions only for the owner on 'file2.txt'?",
+        "What chmod commands were used to set read, write, and execute permissions for the owner and group on 'file3.txt'?"
+    ],
+
+    "Understanding of File Permissions": [
+        "Can you explain what the 'u' (user) permission represents in file permissions?",
+        "What does the 'g' (group) permission represent in file permissions?",
+        "What does the 'o' (other) permission represent in file permissions?"
+    ],
+
+    "Explanation of File Permissions Effects": [
+        "Who can read, write, and execute 'file1.txt'?",
+        "Who can only read and write 'file2.txt'?",
+        "Who can read, write, and execute 'file3.txt', and under what circumstances?"
+    ],
+
+    "Clarity and Conciseness": [
+        "Is the answer clear and easy to follow?",
+        "Are all the commands written correctly and free from errors or typos?"
+    ]
+}

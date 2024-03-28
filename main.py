@@ -40,21 +40,33 @@ model = LLMModel("http://localhost:1234/v1", "lm-studio","./prompting")
 #     metadatas
 # )
 
-# client = chromadb.PersistentClient(CHROMA_DATA_PATH)
-# embedding_func = embedding_functions.SentenceTransformerEmbeddingFunction(
-#         model_name=EMBED_MODEL
-#     )
-# collection = client.get_collection(name=COLLECTION_NAME, embedding_function=embedding_func)
-#
-# query = collection.query(
-#     query_texts=["What chmod did you use to set the specified permissions?"
-#                  , "What is the meaning of each number in the command?"],
-#     n_results=8,
-#     where={"Exercise_number": {"$eq": 1}},
-#     include=["documents", "metadatas"]
-# )
-# print(query["documents"])
-# answers = ",".join(query["documents"][0])
+tasks = model.extract_tasks(documents, metadatas, 3)
+task = tasks["Exercise_1"]
+
+client = chromadb.PersistentClient(CHROMA_DATA_PATH)
+embedding_func = embedding_functions.SentenceTransformerEmbeddingFunction(
+        model_name=EMBED_MODEL
+    )
+collection = client.get_collection(name=COLLECTION_NAME, embedding_function=embedding_func)
+
+query = collection.query(
+    query_texts=["Which chmod command was used to set read, write, and execute permissions for the owner and others on 'file1.txt'?"],
+    n_results=8,
+    where={"$and": [
+        {"Exercise_number": {"$eq": 1}},
+        {"Type": {"$eq": "answer"}}
+    ]},
+    include=["documents", "metadatas"]
+)
+
+print(query["documents"])
+answers = ",".join(query["documents"][0])
+
+with open("./prompting/grading","r") as file:
+    context = file.read()
+
+with open("./prompting/criteria_ex1","r") as file:
+    criteria = file.read()
 
 # context = """
 # You are a lecturer on a University of technology and you need to grade the students' report.
@@ -67,16 +79,16 @@ model = LLMModel("http://localhost:1234/v1", "lm-studio","./prompting")
 # question = "Task: What chmod commands did you use to set the specified permissions?"
 #
 #
-# client = OpenAI(base_url="http://localhost:1234/v1", api_key="lm-studio")
+client = OpenAI(base_url="http://localhost:1234/v1", api_key="lm-studio")
 #
-# completion = client.chat.completions.create(
-#   model="local-model",
-#   messages=[
-#     {"role": "system", "content": context.format(question, answers)},
-#     {"role": "user", "content": "How would you grade that?"}
-#   ],
-#   temperature=0.7,
-# )
-#
-# print(completion.choices[0].message)
+completion = client.chat.completions.create(
+  model="local-model",
+  messages=[
+    {"role": "system", "content": context.format(task, criteria, answers)},
+    {"role": "user", "content": "Please verify the answers accroding to the given criteria"}
+  ],
+  temperature=0.7,
+)
+
+print(completion.choices[0].message)
 

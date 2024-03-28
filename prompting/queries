@@ -1,6 +1,6 @@
 You will be given the task and the criteria of grading it
 
-You will have to generate the queries which will be used to query the vector database in order to check if the criteria has been met.
+You will have to generate the questions which will be used to query the vector database in order to check if the criteria has been met.
 
 Output format:
 One query in one line for each criteria.
