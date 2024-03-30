@@ -1,5 +1,6 @@
 from openai import OpenAI
 
+
 class LLMModel:
 
     def __init__(self, url, api_key, prompt_directory):

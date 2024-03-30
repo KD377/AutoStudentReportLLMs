@@ -21,7 +21,6 @@ section_start_pattern = (
 
 path = "./reports/reportsC/expC_no2.docx"
 
-#UNCOMMENT THIS SECTION IF RUNNING FOR THE FIRST TIME
 documents, metadatas = fr.read_file(path, section_start_pattern,3)
 
 for i in range(len(documents)):
@@ -68,19 +67,9 @@ with open("./prompting/grading","r") as file:
 with open("./prompting/criteria_ex1","r") as file:
     criteria = file.read()
 
-# context = """
-# You are a lecturer on a University of technology and you need to grade the students' report.
-# I will send you the question the students had to answer and you will have to grade if the answer is correct
-# on the scale from 1-3. I will also provide you with the student's answer to the question.
-# Task: {}
-# Student's answer: {}
-# """
-#
-# question = "Task: What chmod commands did you use to set the specified permissions?"
-#
-#
+
 client = OpenAI(base_url="http://localhost:1234/v1", api_key="lm-studio")
-#
+
 completion = client.chat.completions.create(
   model="local-model",
   messages=[

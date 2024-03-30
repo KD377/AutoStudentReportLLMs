@@ -1,6 +1,7 @@
 from docx import Document
 import re
 
+
 def read_docx_file(file_path):
     doc = Document(file_path)
     content = []
@@ -79,7 +80,7 @@ def read_file(file_path, patterns, number_of_exercises):
             if sentence.strip().startswith("Student’s answer:"):
                 student_answer = True
 
-            #Check if it is Ex. num. section and atach proper meta
+            # Check if it is Ex. num. section and atach proper meta
             if re.findall(pattern, section_name):
                 meta["Section_name"] = "3. Research:"
 
