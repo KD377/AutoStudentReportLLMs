@@ -1,14 +1,9 @@
-Grading Criteria:
+Sure, here are the grading criteria for the given task:
 
-* Creating a new user named "TestUser" on the Linux system - 1 point (This task is essential to complete the report.)
-* Adding "TestUser" to a group named "SecureGroup." - 1 point (This task is required to ensure that the user has access to the relevant files.)
-* Ensuring that "SecureGroup" has read and write access to all files inside the "SecureFiles" directory. - 2 points (This task demonstrates a thorough understanding of file permissions and group management in Linux.)
-* Logging in as "TestUser" and attempting to modify "file3.txt" inside the "SecureFiles" directory. - 1 point (This task tests the user's ability to access and modify files in a secure environment.)
+1. [0-1 point] The student has created a new user named "TestUser" on their Linux system. The grader will check for the existence of the user using command line utilities such as `id` or `getent`.
+2. [0-1 point] The student has added "TestUser" to a group named "SecureGroup". The grader will check for the membership of the user in the group using command line utilities such as `groups` or `id`.
+3. [0-1 point] The student has ensured that "SecureGroup" has read and write access to all files inside the "SecureFiles" directory. The grader will check for the permission settings of the directory and its contents using command line utilities such as `ls -l` or `getfacl`.
+4. [0-1 point] The student has logged in as "TestUser" and attempted to modify "file3.txt" inside the "SecureFiles" directory. The grader will check for evidence of login as "TestUser" and the attempted modification of the file.
+5. [0-1 point] The student has documented and explained their steps and reasoning for completing the task. The grader will evaluate the clarity and correctness of the student's explanation.
 
-Grading Schema:
-
-* 5 points: Exceptional work that demonstrates a deep understanding of the subject matter.
-* 4 points: Excellent work that demonstrates a strong understanding of the subject matter.
-* 3 points: Good work that demonstrates an understanding of the subject matter.
-* 2 points: Fair work that demonstrates a basic understanding of the subject matter.
-* 1 point: Poor work that fails to demonstrate a basic understanding of the subject matter.
+Therefore, the maximum number of points a student can receive for this task is 5 points.

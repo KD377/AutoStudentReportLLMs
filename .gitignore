@@ -5,3 +5,4 @@ venv/
 .idea/
 chroma_data/
 *chroma_data/
+.env
