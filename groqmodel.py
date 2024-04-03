@@ -21,7 +21,11 @@ class GROQModel:
                 messages=[
                     {"role": "system", "content": context.format(title, tasks["Exercise_" + str(i + 1)])},
                     {"role": "user",
-                     "content": "Generate a grading requirement along with the specified schema. Each exercise must be graded within range of 0 to 5 points and must be an enteger. For each genereted requirement (maximum 5 requirements), the maximum number of points is 1. Each requirement fullfilment can be only graded with 0 or 1 point. 0.5 poinst granted is forbidden"}
+                     "content": "Generate grading requirements. Whole exercise must be graded within range of 0 to 5 "
+                                "points. You must generate exactly 5 requirements for 1 exercise. For each "
+                                "requirement, the maximum number of points is 1, so the total number of points for "
+                                "whole exercise is 5. Each requirement fulfillment can be only graded with 0 or 1 "
+                                "point. Non integer points like 0.5 etc. are forbidden."}
                 ],
                 model="mixtral-8x7b-32768",
             )
