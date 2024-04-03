@@ -19,7 +19,7 @@ class GROQModel:
             chat_completion = self.client.chat.completions.create(
                 messages=[
                     {"role": "system", "content": context.format(title, tasks["Exercise_" + str(i + 1)])},
-                    {"role": "user", "content": "Generate a grading requirement along with the specified schema"}
+                    {"role": "user", "content": "Generate a grading requirement along with the specified schema. Each exercise must be graded within range of 0 to 5 and must be an enteger. For each genereted requirement, the maximum number of points is 1 and must be an integer."}
                 ],
                 model="mixtral-8x7b-32768",
             )
@@ -86,6 +86,7 @@ class GROQModel:
             Please generate questions for querying a vector database, based on the following criteria associated with a given task. The goal is to assess whether the task's criteria have been met.
         
             Each question should correspond to one of the criteria listed below, and should be used to check the completion and understanding of the task. The questions should be formatted as a JSON object with criteria as keys and the questions as a list of strings.
+            The number of criterias in output should be equal to the number of criterias in the input.
         
             Output format:
         
@@ -109,7 +110,6 @@ class GROQModel:
             {{"NAME OF CRITERION": ["QUESTION 1", "QUESTION 2", ...]}}
             """
 
-            # Wywołanie modelu AI do generowania pytań na podstawie zadanego promptu
             chat_completion = self.client.chat.completions.create(
                 messages=[
                     {"role": "system", "content": prompt.strip()},
@@ -136,7 +136,7 @@ class GROQModel:
         chat_completion = self.client.chat.completions.create(
             messages=[
                 {"role": "system", "content": prompt},
-                {"role": "user", "content": "Please evaluate the answer based on the criteria above."}
+                {"role": "user", "content": "Please evaluate the answer based on the criteria above. The maximum number of points for each exercise is 5. You cannot grade an exercise with a non integer value."}
             ],
             model="mixtral-8x7b-32768",
         )
