@@ -1,3 +1,5 @@
+import chromadb
+from chromadb.utils import embedding_functions
 from groq import Groq
 import json
 import re
@@ -5,10 +7,11 @@ import re
 
 class GROQModel:
 
-    def __init__(self, api_key, prompt_directory):
+    def __init__(self, api_key, prompt_directory, chroma_path):
         self.api_key = api_key
         self.prompt_directory = prompt_directory
         self.client = Groq(api_key=api_key)
+        self.chroma_path = chroma_path
 
     def generate_grading_requirements(self, documents, metadata, title, number_of_tasks):
         with open(self.prompt_directory + "/requirements", "r") as file:
@@ -58,26 +61,6 @@ class GROQModel:
         file_path = self.prompt_directory + "/query_ex" + number
         with open(file_path, "w") as file:
             file.write(query)
-
-    # def generate_queries(self, documents, metadata, number_of_tasks):
-    #     tasks = self.extract_tasks(documents, metadata, number_of_tasks)
-    #
-    #     for i in range(number_of_tasks):
-    #         criteria = self.read_criteria(i)
-    #         task_description = tasks[f"Exercise_{i + 1}"]
-    #
-    #         prompt = f"Generate a query to find documents satisfying the following criteria for the task: '{task_description}' based on the criteria: '{criteria}'"
-    #
-    #         chat_completion = self.client.chat.completions.create(
-    #             messages=[
-    #                 {"role": "system", "content": prompt},
-    #                 {"role": "user", "content": "Please provide a query based on the criteria."}
-    #             ],
-    #             model="mixtral-8x7b-32768",
-    #         )
-    #
-    #         query = chat_completion.choices[0].message.content
-    #         self.save_query(query, str(i + 1))
 
     def generate_queries(self, documents, metadata, number_of_tasks):
         tasks = self.extract_tasks(documents, metadata, number_of_tasks)
@@ -163,7 +146,10 @@ class GROQModel:
             messages=[
                 {"role": "system", "content": prompt},
                 {"role": "user",
-                 "content": "Based on the criteria above, evaluate the answer and provide a final grading in JSON format as follows: {\"points\": \"X\", \"description\": \"Y\"}, where X is the total points awarded and Y is a maximum 2 sentence rationale. Let your answer be only JSON without any other text"}
+                 "content": "Based on the criteria above, evaluate the answer and provide a final grading in JSON "
+                            "format as follows: {\"points\": \"X\", \"description\": \"Y\"}, where X is the total "
+                            "points awarded and Y is a maximum 2 sentence rationale. Let your answer be only JSON "
+                            "without any other text"}
             ],
             model="mixtral-8x7b-32768",
         )
@@ -172,7 +158,6 @@ class GROQModel:
         json_data = self.extract_json_from_response(response)
 
         if json_data:
-            # Zakładamy, że json_data to słownik
             final_grade = [{"points": int(json_data.get("points", 0)), "description": json_data.get("description", "")}]
         else:
             print("No valid JSON found in the AI response:", response)
@@ -183,3 +168,69 @@ class GROQModel:
             json.dump(final_grade, file, indent=4)
 
         return final_grade
+
+    def evaluate_report_with_queries(self, task_description, criteria,
+                                     collection_name, embedding_func_name):
+
+        chroma_client = chromadb.PersistentClient(self.chroma_path)
+        embedding_func = embedding_functions.SentenceTransformerEmbeddingFunction(model_name=embedding_func_name)
+        collection = chroma_client.get_collection(name=collection_name, embedding_function=embedding_func)
+
+        generated_queries_json_path = f"{self.prompt_directory}/generated_queries.json"
+        try:
+            with open(generated_queries_json_path, "r") as file:
+                generated_queries = json.load(file)
+        except FileNotFoundError:
+            print(f"File {generated_queries_json_path} not found.")
+            return
+
+        db_contexts = []
+        for query in generated_queries:
+            response = collection.query(
+                query_texts=[query],
+                n_results=10,
+                include=["documents", "metadatas"]
+            )
+            db_contexts.extend(response["documents"])
+
+            db_context = " ".join([str(doc) for doc in db_contexts])
+
+            prompt = f"""
+                Given the task description below, use the provided database context and generated queries to evaluate the report. Provide a grading rationale based on the grading criteria.
+
+                Task Description: {task_description}
+
+                Grading Criteria: {criteria}
+
+                Database Context: {db_context}
+
+                Please provide your grading in JSON format: {{"points": "X", "description": "Y"}}
+                """
+
+            print(prompt)
+
+        chat_completion = self.client.chat.completions.create(
+            messages=[
+                {"role": "system", "content": prompt.strip()},
+                {"role": "user", "content": "Evaluate the report based on the provided information."}
+            ],
+            model="mixtral-8x7b-32768",
+        )
+
+        response = chat_completion.choices[0].message.content
+
+        grading_data = {
+            "task_description": task_description,
+            "grading_criteria": criteria,
+            "model_response": response
+        }
+
+        completion_filename = f"{self.prompt_directory}/completion_with_criteria.json"
+        try:
+            with open(completion_filename, 'w', encoding='utf-8') as file:
+                json.dump(grading_data, file, indent=4, ensure_ascii=False)
+            print(f"Ocena zapisana w pliku: {completion_filename}")
+        except Exception as e:
+            print(f"Wystąpił błąd podczas zapisu do pliku: {e}")
+
+        return grading_data

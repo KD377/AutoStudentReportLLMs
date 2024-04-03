@@ -1,3 +1,5 @@
+import json
+
 import chromaManager as db
 import FileReader as fr
 import chromadb
@@ -5,8 +7,6 @@ from dotenv import load_dotenv
 import os
 from chromadb.utils import embedding_functions
 from groqmodel import GROQModel
-
-
 
 CHROMA_DATA_PATH = "chroma_data"
 EMBED_MODEL = "sentence-transformers/paraphrase-MiniLM-L6-v2"
@@ -32,10 +32,14 @@ documents, metadatas = fr.read_file(path, section_start_pattern, 3)
 title = next((doc for doc, meta in zip(documents, metadatas) if meta["Section_name"] == "Title:"), None)
 
 # Inicjalizacja modelu GROQ
-model = GROQModel(api_key, "./prompting")
+model = GROQModel(api_key, "./prompting", CHROMA_DATA_PATH)
 
 model.generate_grading_requirements(documents, metadatas, title, 3)
 model.generate_queries(documents, metadatas, 3)
+
+generated_queries_path = "./prompting/generated_queries.json"
+with open(generated_queries_path, "r") as file:
+    generated_queries = json.load(file)
 
 # for i in range(len(documents)):
 #     if metadatas[i]["Section_name"] == "Title:":
@@ -95,5 +99,6 @@ with open("./prompting/criteria_ex1", "r") as file:
 #
 # print(completion.choices[0].message)
 
-completion = model.create_completion(context, task, criteria, answers)
+# completion = model.create_completion(context, task, criteria, answers)
+completion = model.evaluate_report_with_queries(task, criteria, COLLECTION_NAME, EMBED_MODEL)
 print(completion)
