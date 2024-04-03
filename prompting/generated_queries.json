@@ -1,0 +1,53 @@
+{
+    "0": {
+        "Correctness": [
+            "Can you verify that a directory named 'SecureFiles' was created in your home directory and that it contains three text files named 'file1.txt', 'file2.txt', and 'file3.txt'?"
+        ],
+        "Permissions": [
+            "Check the permissions of 'file1.txt' and verify that it is readable, writable, and executable by the owner, and readable by others. (Do the same for 'file2.txt' and 'file3.txt' with their respective permissions)."
+        ],
+        "chmod commands": [
+            "What chmod commands did you use to set the permissions for each of the three text files in the 'SecureFiles' directory?"
+        ],
+        "Explanation of permissions": [
+            "Can you explain how the permissions (read, write, execute) for each file (file1.txt, file2.txt, file3.txt) would affect a user's access or interaction with those files?"
+        ],
+        "Code formatting": [
+            "Is the provided code for creating the directory, text files, and setting their permissions properly formatted, easy to read, and understand?"
+        ]
+    },
+    "1": {
+        "Correct creation of a new user \"TestUser\" on a Linux system (1 point)": [
+            "Can you provide a command line output or screenshot that shows the creation of the user 'TestUser'?"
+        ],
+        "Successful addition of \"TestUser\" to a group named \"SecureGroup\" (1 point)": [
+            "Can you provide a command line output or screenshot that shows 'TestUser' has been added to the group 'SecureGroup'?"
+        ],
+        "Proper modification of file permissions for the \"SecureFiles\" directory (1 point)": [
+            "Can you provide a command line output or screenshot that shows the group 'SecureGroup' has been granted read and write access to all files inside the 'SecureFiles' directory?"
+        ],
+        "Successful login as \"TestUser\" (1 point)": [
+            "Can you provide a command line output or screenshot that shows a successful login as 'TestUser'?"
+        ],
+        "Successful attempt to modify \"file3.txt\" inside the \"SecureFiles\" directory (1 point)": [
+            "Can you provide evidence of an attempt to modify 'file3.txt' while logged in as 'TestUser'? If you were unable to modify the file, please explain why in your report."
+        ]
+    },
+    "2": {
+        "Proper logging setup (1 point)": [
+            "Can you provide evidence that shows file access logging has been enabled for the 'SecureFiles' directory? This can be demonstrated by showing the relevant configuration or system log entries."
+        ],
+        "Creation of a log file (1 point)": [
+            "Can you provide the log file that you created to record all file access events? Please include the location and format of the log file in your response."
+        ],
+        "Accessing a file and recording the event (1 point)": [
+            "Can you demonstrate that you accessed 'file1.txt' from another user account and that the event was recorded in the log file? This can be shown by providing a screenshot or text copy of the relevant log entry."
+        ],
+        "Interpretation of the log file (1 point)": [
+            "Can you interpret the log file and provide a clear explanation of the log entry that was created when you accessed 'file1.txt'? Please include the user that accessed the file, the time of access, and the type of access (read, write, modify, etc.) in your response."
+        ],
+        "Submission of all required components (1 point)": [
+            "Can you provide all required components of the task, including the configuration changes, log file, and documentation of the log entry? Please ensure that all components are clearly labeled and attached as part of your submission."
+        ]
+    }
+}
