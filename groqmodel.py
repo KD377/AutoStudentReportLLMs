@@ -21,7 +21,7 @@ class GROQModel:
                 messages=[
                     {"role": "system", "content": context.format(title, tasks["Exercise_" + str(i + 1)])},
                     {"role": "user",
-                     "content": "Generate a grading requirement along with the specified schema. Each exercise must be graded within range of 0 to 5 points and must be an enteger. For each genereted requirement, the maximum number of points is 1. Each requirement fullfilment can be only graded with 0 or 1 point."}
+                     "content": "Generate a grading requirement along with the specified schema. Each exercise must be graded within range of 0 to 5 points and must be an enteger. For each genereted requirement (maximum 5 requirements), the maximum number of points is 1. Each requirement fullfilment can be only graded with 0 or 1 point. 0.5 poinst granted is forbidden"}
                 ],
                 model="mixtral-8x7b-32768",
             )
@@ -134,10 +134,23 @@ class GROQModel:
         return criteria_questions
 
     def extract_json_from_response(self, response):
-        json_pattern = r"```json\n([\s\S]*?)\n```"
-        match = re.search(json_pattern, response)
-        if match:
-            return match.group(1)
+        try:
+            return json.loads(response)
+        except json.JSONDecodeError:
+            cleaned_response = re.sub(r'^.*?{', '{', response, flags=re.DOTALL)
+            try:
+                potential_json = json.loads(cleaned_response)
+                return potential_json
+            except json.JSONDecodeError:
+                json_pattern = r'\{(?:[^{}]|(?R))*\}'
+                matches = re.findall(json_pattern, response, re.DOTALL)
+                if matches:
+                    longest_match = max(matches, key=len)
+                    if isinstance(longest_match, str):
+                        try:
+                            return json.loads(longest_match)
+                        except json.JSONDecodeError:
+                            pass
         return None
 
     def create_completion(self, context, task, criteria, answers):
@@ -146,23 +159,19 @@ class GROQModel:
             messages=[
                 {"role": "system", "content": prompt},
                 {"role": "user",
-                 "content": "Based on the criteria above, evaluate the answer and provide a final grading in JSON format as follows: {\"points\": \"X\", \"description\": \"Y\"}, where X is the total points awarded and Y is a maximum 2 sentence rationale."}
+                 "content": "Based on the criteria above, evaluate the answer and provide a final grading in JSON format as follows: {\"points\": \"X\", \"description\": \"Y\"}, where X is the total points awarded and Y is a maximum 2 sentence rationale. Let your answer be only JSON without any other text"}
             ],
             model="mixtral-8x7b-32768",
         )
 
         response = chat_completion.choices[0].message.content
-        json_string = self.extract_json_from_response(response)
+        json_data = self.extract_json_from_response(response)
 
-        if json_string:
-            try:
-                response_data = json.loads(json_string)
-                final_grade = [response_data]
-            except json.JSONDecodeError as e:
-                print(f"Error processing the extracted JSON: {e}")
-                final_grade = [{"points": 0, "description": "Unable to parse grading rationale from the AI response."}]
+        if json_data:
+            # Zakładamy, że json_data to słownik
+            final_grade = [{"points": int(json_data.get("points", 0)), "description": json_data.get("description", "")}]
         else:
-            print(f"No valid JSON found in the AI response: {response}")
+            print("No valid JSON found in the AI response:", response)
             final_grade = [
                 {"points": 0, "description": "The AI response did not contain valid JSON grading rationale."}]
 
