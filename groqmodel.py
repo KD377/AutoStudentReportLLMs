@@ -1,5 +1,6 @@
 from groq import Groq
 import json
+import re
 
 
 class GROQModel:
@@ -131,14 +132,39 @@ class GROQModel:
 
         return criteria_questions
 
+    
     def create_completion(self, context, task, criteria, answers):
         prompt = context.format(task, criteria, answers)
         chat_completion = self.client.chat.completions.create(
             messages=[
                 {"role": "system", "content": prompt},
-                {"role": "user", "content": "Please evaluate the answer based on the criteria above. The maximum number of points for each exercise is 5. You cannot grade an exercise with a non integer value."}
+                {"role": "user", "content": "Please evaluate the answer based on the criteria above. Write the number of points and a 2-sentence description."}
             ],
             model="mixtral-8x7b-32768",
         )
-        return chat_completion.choices[0].message.content
+        response = chat_completion.choices[0].message.content
+
+        # Parse the response into JSON format
+        response_list = []
+        for item in response.split("\n"):
+            if item.strip():
+                match = re.match(r'(\d+)\s*point[s]?', item)
+                if match:
+                    points = int(match.group(1))
+                    description = item[match.end():].strip()
+                    response_list.append({"points": points, "description": description})
+                else:
+                    match_criteria = re.match(r'.*(\d+)\s*point[s]?', item)
+                    if match_criteria:
+                        points = int(match_criteria.group(1))
+                        description = item.strip()
+                        response_list.append({"points": points, "description": description})
+                    else:
+                        response_list.append({"points": 0, "description": item.strip()})
+
+        with open("completion.json", 'w') as file:
+            json.dump(response_list, file)
+
+        return response_list
+
 
