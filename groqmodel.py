@@ -11,7 +11,7 @@ class GROQModel:
         self.client = Groq(api_key=api_key)
 
     def generate_grading_requirements(self, documents, metadata, title, number_of_tasks):
-        with open(self.prompt_directory+"/requirements", "r") as file:
+        with open(self.prompt_directory + "/requirements", "r") as file:
             context = file.read()
 
         tasks = self.extract_tasks(documents, metadata, number_of_tasks)
@@ -20,7 +20,8 @@ class GROQModel:
             chat_completion = self.client.chat.completions.create(
                 messages=[
                     {"role": "system", "content": context.format(title, tasks["Exercise_" + str(i + 1)])},
-                    {"role": "user", "content": "Generate a grading requirement along with the specified schema. Each exercise must be graded within range of 0 to 5 and must be an enteger. For each genereted requirement, the maximum number of points is 1 and must be an integer."}
+                    {"role": "user",
+                     "content": "Generate a grading requirement along with the specified schema. Each exercise must be graded within range of 0 to 5 points and must be an enteger. For each genereted requirement, the maximum number of points is 1. Each requirement fullfilment can be only graded with 0 or 1 point."}
                 ],
                 model="mixtral-8x7b-32768",
             )
@@ -132,39 +133,40 @@ class GROQModel:
 
         return criteria_questions
 
-    
+    def extract_json_from_response(self, response):
+        json_pattern = r"```json\n([\s\S]*?)\n```"
+        match = re.search(json_pattern, response)
+        if match:
+            return match.group(1)
+        return None
+
     def create_completion(self, context, task, criteria, answers):
         prompt = context.format(task, criteria, answers)
         chat_completion = self.client.chat.completions.create(
             messages=[
                 {"role": "system", "content": prompt},
-                {"role": "user", "content": "Please evaluate the answer based on the criteria above. Write the number of points and a 2-sentence description."}
+                {"role": "user",
+                 "content": "Based on the criteria above, evaluate the answer and provide a final grading in JSON format as follows: {\"points\": \"X\", \"description\": \"Y\"}, where X is the total points awarded and Y is a maximum 2 sentence rationale."}
             ],
             model="mixtral-8x7b-32768",
         )
+
         response = chat_completion.choices[0].message.content
+        json_string = self.extract_json_from_response(response)
 
-        # Parse the response into JSON format
-        response_list = []
-        for item in response.split("\n"):
-            if item.strip():
-                match = re.match(r'(\d+)\s*point[s]?', item)
-                if match:
-                    points = int(match.group(1))
-                    description = item[match.end():].strip()
-                    response_list.append({"points": points, "description": description})
-                else:
-                    match_criteria = re.match(r'.*(\d+)\s*point[s]?', item)
-                    if match_criteria:
-                        points = int(match_criteria.group(1))
-                        description = item.strip()
-                        response_list.append({"points": points, "description": description})
-                    else:
-                        response_list.append({"points": 0, "description": item.strip()})
+        if json_string:
+            try:
+                response_data = json.loads(json_string)
+                final_grade = [response_data]
+            except json.JSONDecodeError as e:
+                print(f"Error processing the extracted JSON: {e}")
+                final_grade = [{"points": 0, "description": "Unable to parse grading rationale from the AI response."}]
+        else:
+            print(f"No valid JSON found in the AI response: {response}")
+            final_grade = [
+                {"points": 0, "description": "The AI response did not contain valid JSON grading rationale."}]
 
-        with open("completion.json", 'w') as file:
-            json.dump(response_list, file)
+        with open(f"{self.prompt_directory}/completion.json", 'w') as file:
+            json.dump(final_grade, file, indent=4)
 
-        return response_list
-
-
+        return final_grade
