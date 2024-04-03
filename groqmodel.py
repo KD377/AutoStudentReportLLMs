@@ -157,29 +157,70 @@ class GROQModel:
                             pass
         return None
 
-    def create_completion(self, context, task, criteria, answers):
-        prompt = context.format(task, criteria, answers)
-        chat_completion = self.client.chat.completions.create(
-            messages=[
-                {"role": "system", "content": prompt},
-                {"role": "user",
-                 "content": "Based on the criteria above, evaluate the answer and provide a final grading in JSON format as follows: {\"points\": \"X\", \"description\": \"Y\"}, where X is the total points awarded and Y is a maximum 2 sentence rationale. Let your answer be only JSON without any other text"}
-            ],
-            model="mixtral-8x7b-32768",
-        )
+    # def create_completion(self, context, task, criteria, answers):
+    #     prompt = context.format(task, criteria, answers)
+    #     chat_completion = self.client.chat.completions.create(
+    #         messages=[
+    #             {"role": "system", "content": prompt},
+    #             {"role": "user",
+    #              "content": "Based on the criteria above, evaluate the answer and provide a final grading in JSON format as follows: {\"points\": \"X\", \"description\": \"Y\"}, where X is the total points awarded and Y is a maximum 2 sentence rationale. Let your answer be only JSON without any other text"}
+    #         ],
+    #         model="mixtral-8x7b-32768",
+    #     )
 
-        response = chat_completion.choices[0].message.content
-        json_data = self.extract_json_from_response(response)
+    #     response = chat_completion.choices[0].message.content
+    #     json_data = self.extract_json_from_response(response)
 
-        if json_data:
-            # Zakładamy, że json_data to słownik
-            final_grade = [{"points": int(json_data.get("points", 0)), "description": json_data.get("description", "")}]
-        else:
-            print("No valid JSON found in the AI response:", response)
-            final_grade = [
-                {"points": 0, "description": "The AI response did not contain valid JSON grading rationale."}]
+    #     if json_data:
+    #         # Zakładamy, że json_data to słownik
+    #         final_grade = [{"points": int(json_data.get("points", 0)), "description": json_data.get("description", "")}]
+    #     else:
+    #         print("No valid JSON found in the AI response:", response)
+    #         final_grade = [
+    #             {"points": 0, "description": "The AI response did not contain valid JSON grading rationale."}]
 
-        with open(f"{self.prompt_directory}/completion.json", 'w') as file:
-            json.dump(final_grade, file, indent=4)
+    #     with open(f"{self.prompt_directory}/completion.json", 'w') as file:
+    #         json.dump(final_grade, file, indent=4)
 
-        return final_grade
+    #     return final_grade
+
+    def create_completion(self, context, tasks, criteria, answers):
+        completions = []
+
+        for task in tasks:
+            prompt = context.format(task, criteria, answers)
+            chat_completion = self.client.chat.completions.create(
+                messages=[
+                    {"role": "system", "content": prompt},
+                    {"role": "user",
+                    "content": "Based on the criteria above, evaluate the answer and provide a final grading in JSON format as follows: {\"points\": \"X\", \"description\": \"Y\"}, where X is the total points awarded and Y is a maximum 2 sentence rationale. Let your answer be only JSON without any other text"}
+                ],
+                model="mixtral-8x7b-32768",
+            )
+
+            response = chat_completion.choices[0].message.content
+            json_data = self.extract_json_from_response(response)
+
+            if json_data:
+                final_grade = {"points": int(json_data.get("points", 0)), "description": json_data.get("description", "")}
+            else:
+                print("No valid JSON found in the AI response:", response)
+                final_grade = {"points": 0, "description": "The AI response did not contain valid JSON grading rationale."}
+
+            completions.append(final_grade)
+
+        return completions
+    
+    def generate_report(self,  grades, number_of_tasks):
+        report = {}
+
+        for i in range(number_of_tasks):
+            report[f"Exercise_{i + 1}"] = {
+                "Grades": grades[i],
+            }
+
+        with open(f"{self.prompt_directory}/report.json", "w") as file:
+            json.dump(report, file, indent=4)
+
+        return report
+    

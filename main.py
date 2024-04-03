@@ -54,7 +54,9 @@ model.generate_queries(documents, metadatas, 3)
 # )
 
 tasks = model.extract_tasks(documents, metadatas, 3)
-task = tasks["Exercise_1"]
+# task = tasks["Exercise_1"]
+tasks = [tasks["Exercise_1"], tasks["Exercise_2"], tasks["Exercise_3"]]
+
 
 client = chromadb.PersistentClient(CHROMA_DATA_PATH)
 embedding_func = embedding_functions.SentenceTransformerEmbeddingFunction(
@@ -95,5 +97,8 @@ with open("./prompting/criteria_ex1", "r") as file:
 #
 # print(completion.choices[0].message)
 
-completion = model.create_completion(context, task, criteria, answers)
+completion = model.create_completion(context, tasks, criteria, answers)
 print(completion)
+
+report = model.generate_report(completion, 3)
+
