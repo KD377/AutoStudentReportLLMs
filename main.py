@@ -7,7 +7,6 @@ from chromadb.utils import embedding_functions
 from groqmodel import GROQModel
 
 
-
 CHROMA_DATA_PATH = "chroma_data"
 EMBED_MODEL = "sentence-transformers/paraphrase-MiniLM-L6-v2"
 COLLECTION_NAME = "demo_docs"
@@ -27,15 +26,17 @@ api_key = os.getenv("GROQ_API_KEY")
 
 path = "./reports/reportsC/expC_no2.docx"
 
-documents, metadatas = fr.read_file(path, section_start_pattern, 3)
+documents, metadatas = fr.read_file(path, section_start_pattern)
 
 title = next((doc for doc, meta in zip(documents, metadatas) if meta["Section_name"] == "Title:"), None)
 
 # Inicjalizacja modelu GROQ
 model = GROQModel(api_key, "./prompting")
 
-model.generate_grading_requirements(documents, metadatas, title, 3)
+model.generate_grading_criteria(documents, metadatas, title, 3)
 model.generate_queries(documents, metadatas, 3)
+model.generate_aim_criteria(documents, metadatas, title)
+model.generate_aim_queries(documents, metadatas)
 
 # for i in range(len(documents)):
 #     if metadatas[i]["Section_name"] == "Title:":
@@ -75,7 +76,7 @@ query = collection.query(
     include=["documents", "metadatas"]
 )
 
-print(query["documents"])
+#print(query["documents"])
 answers = ",".join(query["documents"][0])
 
 with open("./prompting/grading", "r") as file:
@@ -98,7 +99,7 @@ with open("./prompting/criteria_ex1", "r") as file:
 # print(completion.choices[0].message)
 
 completion = model.create_completion(context, tasks, criteria, answers)
-print(completion)
+#print(completion)
 
 report = model.generate_report(completion, 3)
 

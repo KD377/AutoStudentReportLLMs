@@ -212,10 +212,9 @@ class GROQModel:
                             "whole exercise is 5. Each requirement fulfillment can be only graded with 0 or 1 "
                             "point. Non integer points like 0.5 etc. are forbidden."}
             ],
-            model="mixtral-8x7b-32768",
+            model = "mixtral-8x7b-32768",
         )
         criteria = chat_completion.choices[0].message.content
         file_path = self.prompt_directory + "/criteria_aim"
         with open(file_path, "w") as file:
             file.write(criteria)
-

@@ -1,15 +1,9 @@
-Sure, here are the grading criteria for the given task:
+Sure, I understand. Here are the grading requirements for the given task:
 
-1. Correct creation of the directory and text files (1 point)
-The student should be able to create a new directory called "SecureFiles" in their home directory and three text files "file1.txt," "file2.txt," and "file3.txt" inside the "SecureFiles" directory.
-2. Appropriate file permissions (2 points)
-* "file1.txt" should have the correct permissions: readable, writable, and executable by the owner (444 in octal notation) and readable by others (4 in octal notation), resulting in a permission code of 444 for the owner and 4 for others.
-* "file2.txt" should have the correct permissions: readable and writable by the owner only (644 in octal notation), resulting in a permission code of 644.
-* "file3.txt" should have the correct permissions: readable, writable, and executable by the owner and the group (770 in octal notation), resulting in a permission code of 770.
-3. Accurate chmod commands (1 point)
-The student should be able to list the chmod commands used for each file. For example, `chmod 444 file1.txt`, `chmod 644 file2.txt`, `chmod 770 file3.txt`.
-4. Explanation of the effects of file permissions (1 point)
-The student should explain how the specified permissions affect the access to the files. Here are possible explanations:
-* "file1.txt": The owner can read, write, and execute the file, and other users can only read the file.
-* "file2.txt": The owner can read and write the file, but other users cannot access the file.
-* "file3.txt": The owner and the group can read, write, and execute the file. Other users cannot access the file.
+1. Clear problem statement: The student should be able to clearly and concisely state the problem they are trying to solve in the report. (0 or 1 point)
+2. Relevant background: The student should provide relevant background information that will help the reader understand the context of the problem and the approach taken. (0 or 1 point)
+3. Proposed solution: The student should propose a clear and well-reasoned solution to the problem. (0 or 1 point)
+4. Evaluation of the solution: The student should evaluate the effectiveness of the proposed solution by providing evidence and justification for their claims. (0 or 1 point)
+5. Clarity and organization: The report should be well-organized, easy to follow, and free of grammatical and spelling errors. (0 or 1 point)
+
+Note: These criteria are not task-specific and can be used as a general framework for evaluating any report or paper. The specific requirements of the report will dictate which criteria are most relevant.

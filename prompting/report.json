@@ -1,20 +1,20 @@
 {
     "Exercise_1": {
         "Grades": {
-            "points": 5,
-            "description": "The student correctly set the permissions and provided the chmod commands used. However, the code formatting could be improved and the explanation of permissions could be more detailed."
+            "points": 3,
+            "description": "The answer clearly and correctly states the chmod commands used and their effects, but lacks a clear problem statement, relevant background, and evaluation of the solution."
         }
     },
     "Exercise_2": {
         "Grades": {
             "points": 4,
-            "description": "The student correctly provided the chmod commands used and gave a good explanation of the permissions, but did not show the creation of the user, group, or directory, nor did they attempt to log in as the test user."
+            "description": "The answer provides clear chmod commands and their respective file permission settings, but lacks a clear problem statement, relevant background, and evaluation of the solution, which are also required for a complete answer."
         }
     },
     "Exercise_3": {
         "Grades": {
-            "points": 5,
-            "description": "The student provided the correct chmod commands and explained the permissions correctly, but didn't specify if the required directory was created or if the logs were checked."
+            "points": 4,
+            "description": "The answer provides clear and correct chmod commands and their respective file permissions. However, it lacks a clear problem statement, relevant background, and evaluation of the solution, which results in fewer points."
         }
     }
 }
