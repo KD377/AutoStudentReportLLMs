@@ -5,134 +5,61 @@ import re
 
 class GROQModel:
 
-    def __init__(self, api_key, prompt_directory):
+    def __init__(self, api_key, prompt_directory, repository):
         self.api_key = api_key
         self.prompt_directory = prompt_directory
+        self.generating_directory = prompt_directory + "/generating"
+        self.repository = repository
         self.client = Groq(api_key=api_key)
 
-    def extract_all_sections(self, documents, metadatas):
-        sections = {}
-        for doc, meta in zip(documents, metadatas):
-            section_name = meta["Section_name"].strip(":")
-            if section_name not in sections:
-                sections[section_name] = [doc]
-            else:
-                sections[section_name].append(doc)
-        return sections
+    def create_completion(self, context, user_prompt):
+        chat_completion = self.client.chat.completions.create(
+            messages=[
+                {"role": "system", "content": context},
+                {"role": "user", "content": user_prompt}
+            ],
+            model="mixtral-8x7b-32768",
+        )
+        return chat_completion
 
     def generate_grading_criteria(self, documents, metadata, title, number_of_tasks):
         with open(self.prompt_directory + "/requirements", "r") as file:
             context = file.read()
+        with open(self.prompt_directory + "/requirements_instruction", "r") as file:
+            user_prompt = file.read()
 
-        tasks = self.extract_tasks(documents, metadata, number_of_tasks)
+        tasks = self.extract_tasks(number_of_tasks)
 
         for i in range(number_of_tasks):
-            chat_completion = self.client.chat.completions.create(
-                messages=[
-                    {"role": "system", "content": context.format(title, tasks["Exercise_" + str(i + 1)])},
-                    {"role": "user",
-                     "content": "Generate grading requirements. Whole exercise must be graded within range of 0 to 5 "
-                                "points. You must generate exactly 5 requirements for 1 exercise. For each "
-                                "requirement, the maximum number of points is 1, so the total number of points for "
-                                "whole exercise is 5. Each requirement fulfillment can be only graded with 0 or 1 "
-                                "point. Non integer points like 0.5 etc. are forbidden."}
-                ],
-                model="mixtral-8x7b-32768",
-            )
-
+            chat_completion = self.create_completion(context.format(title, tasks["Exercise_" + str(i + 1)]), user_prompt)
             criteria = chat_completion.choices[0].message.content
             self.save_criteria(criteria, str(i + 1))
 
     def save_criteria(self, criteria, exercise_number):
-        file_path = self.prompt_directory + "/criteria_ex" + str(exercise_number)
+        file_path = self.generating_directory + "/criteria_ex" + str(exercise_number)
         with open(file_path, "w") as file:
             file.write(criteria)
 
-    def extract_tasks(self, documents, metadata, number_of_tasks):
+    def extract_tasks(self, number_of_tasks):
         tasks = {}
+
         for i in range(number_of_tasks):
-            task = []
-            for sentence, data in zip(documents, metadata):
-                if (data["Section_name"] == "3. Research:" and data["Exercise_number"] == i + 1 and
-                        data["Type"] == "description"):
-                    task.append(sentence)
-            tasks["Exercise_" + str(i + 1)] = ",".join(task)
+            tasks["Exercise_" + str(i + 1)] = self.repository.get_task_description(i + 1)
+
         return tasks
 
-    def extract_aim(self, documents, metadata):
-        aim = []
-        for sentence, data in zip(documents, metadata):
-            if (data["Section_name"] == "1. Experiment Aim"):
-                aim.append(sentence)
-        return aim
-
     def read_criteria(self, number):
-        with open(self.prompt_directory + "/criteria_ex" + str(number + 1), "r") as file:
+        with open(self.generating_directory + "/criteria_ex" + str(number), "r") as file:
             context = file.read()
         return context
 
-    def save_query(self, query, number):
-        file_path = self.prompt_directory + "/query_ex" + number
-        with open(file_path, "w") as file:
-            file.write(query)
-
-    def generate_queries(self, documents, metadata, number_of_tasks):
-        tasks = self.extract_tasks(documents, metadata, number_of_tasks)
-
-        criteria_questions = {}
+    def get_task_answers(self, number_of_tasks):
+        tasks = {}
 
         for i in range(number_of_tasks):
-            criteria = self.read_criteria(i)
-            task_description = tasks[f"Exercise_{i + 1}"]
+            tasks["Exercise_" + str(i + 1)] = self.repository.get_task_answer(i + 1)
 
-            prompt = f"""
-            Please generate questions for querying a vector database, based on the following criteria associated with a given task. The goal is to assess whether the task's criteria have been met.
-
-            Each question should correspond to one of the criteria listed below, and should be used to check the completion and understanding of the task. The questions should be formatted as a JSON object with criteria as keys and the questions as a list of strings.
-            The number of criterias in output should be equal to the number of criterias in the input.
-
-            Output format:
-
-            One question in one line for each criteria. Use json format. 
-
-            ###
-
-            Task Description: 
-
-            {task_description}
-
-            ###
-
-            Grading Criteria:
-
-            {criteria}
-
-            ###
-
-            Expected Output Format:
-            {{"NAME OF CRITERION": ["QUESTION 1", "QUESTION 2", ...]}}
-            """
-
-            chat_completion = self.client.chat.completions.create(
-                messages=[
-                    {"role": "system", "content": prompt.strip()},
-                    {"role": "user", "content": "Please generate questions in JSON format based on the criteria."}
-                ],
-                model="mixtral-8x7b-32768",
-            )
-
-            generated_questions = chat_completion.choices[0].message.content
-
-            try:
-                questions_json = json.loads(generated_questions)
-                criteria_questions[i] = questions_json
-            except json.JSONDecodeError:
-                print(f"Error decoding JSON from response: {generated_questions}")
-
-        with open(f"{self.prompt_directory}/generated_queries.json", "w") as file:
-            json.dump(criteria_questions, file, indent=4)
-
-        return criteria_questions
+        return tasks
 
     def extract_json_from_response(self, response):
         try:
@@ -154,19 +81,23 @@ class GROQModel:
                             pass
         return None
 
-    def create_completion(self, context, tasks, criteria, answers):
+    def grade_tasks(self, number_of_tasks):
+        with open("./prompting/grading", "r") as file:
+            context = file.read()
         completions = []
-
+        tasks = self.extract_tasks(number_of_tasks)
+        i = 0
         for task in tasks:
-            prompt = context.format(task, criteria, answers)
-            chat_completion = self.client.chat.completions.create(
-                messages=[
-                    {"role": "system", "content": prompt},
-                    {"role": "user",
-                     "content": "Based on the criteria above, evaluate the answer and provide a final grading in JSON format as follows: {\"points\": \"X\", \"description\": \"Y\"}, where X is the total points awarded and Y is a maximum 2 sentence rationale. Let your answer be only JSON without any other text"}
-                ],
-                model="mixtral-8x7b-32768",
-            )
+            criteria = self.read_criteria(i+1)
+            answer = self.repository.get_task_answer(i+1)
+            prompt = context.format(task, criteria, answer)
+            chat_completion = self.create_completion(prompt,"Based on the criteria above, "
+                                                            "evaluate the answer and provide a final grading"
+                                                            " in JSON format as follows: "
+                                                            "{\"points\": \"X\", \"description\": \"Y\"},"
+                                                            "where X is the total points awarded and Y is a "
+                                                            "maximum 2 sentence rationale. Let your answer be "
+                                                            "only JSON without any other text")
 
             response = chat_completion.choices[0].message.content
             json_data = self.extract_json_from_response(response)
@@ -180,6 +111,7 @@ class GROQModel:
                                "description": "The AI response did not contain valid JSON grading rationale."}
 
             completions.append(final_grade)
+            i += 1
 
         return completions
 
@@ -191,7 +123,7 @@ class GROQModel:
                 "Grades": grades[i],
             }
 
-        with open(f"{self.prompt_directory}/report.json", "w") as file:
+        with open(f"{self.generating_directory}/report.json", "w") as file:
             json.dump(report, file, indent=4)
 
         return report
@@ -215,7 +147,7 @@ class GROQModel:
             model="mixtral-8x7b-32768",
         )
         criteria = chat_completion.choices[0].message.content
-        file_path = self.prompt_directory + "/criteria_aim"
+        file_path = self.generating_directory + "/criteria_aim"
         with open(file_path, "w") as file:
             file.write(criteria)
 

@@ -1,0 +1,14 @@
+Please generate questions for querying a vector database, based on the following criteria associated with a given task. The goal is to assess whether the task's criteria have been met.
+Each question should correspond to one of the criteria listed below, and should be used to check the completion and understanding of the task. The questions should be formatted as a JSON object with criteria as keys and the questions as a list of strings.
+The number of criterias in output should be equal to the number of criterias in the input.
+Output format:
+One question in one line for each criteria. Use json format.
+###
+Task Description:
+{}
+###
+Grading Criteria:
+{}
+###
+Expected Output Format:
+{{"NAME OF CRITERION": ["QUESTION 1", "QUESTION 2", ...]}}
