@@ -1,0 +1,7 @@
+Sure, here are the grading criteria for the given task with a maximum of 5 points:
+
+1. Proper Enablement of File Access Logging (1 point): The student must demonstrate the ability to enable file access logging for the specified "SecureFiles" directory. This can be achieved by providing the correct command or series of commands used to enable logging.
+2. Creation of a Log File to Record All File Access Events (1 point): The student must prove that they have created a log file to record all file access events. The location and name of the log file should be clearly stated.
+3. Accessing "file1.txt" from Another User Account (1 point): The student must show that they have accessed "file1.txt" from another user account. This can be demonstrated through the use of a command or screenshot showing the access of the file from the other account.
+4. Checking the Log File for the Recorded Event (1 point): The student must check the log file for the recorded event of accessing "file1.txt" from another user account. The student should provide the relevant log file entry indicating the access.
+5. Clarity and Coherence of the Explanation (1 point): The student must present the exercise in a clear and coherent manner, providing sufficient detail and explanation in their response. The response should be easy to understand, well-organized, and free from grammatical errors.

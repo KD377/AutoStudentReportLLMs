@@ -19,11 +19,12 @@ def split_document_into_sections(content, patterns):
             if line.strip().startswith(pattern):
                 current_section = pattern
                 sections[current_section] = []
-                sections[current_section].append(current_section)
+                if not line.startswith("Title:") and not line.startswith("Author:"):
+                    sections[current_section].append(current_section)
                 if current_section == "Title:":
-                    sections[current_section].append(line[len("Title:"):].strip())
+                    sections[current_section].append(line.strip())
                 elif current_section == "Author:":
-                    sections[current_section].append(line[len("Author:"):].strip())
+                    sections[current_section].append(line.strip())
                 break
         else:
             if current_section is not None and line.strip():

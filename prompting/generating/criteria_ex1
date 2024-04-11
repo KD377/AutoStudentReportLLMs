@@ -1,0 +1,7 @@
+1. Correct creation of the directory and files (1 point): The student must successfully create a new directory named "SecureFiles" in their home directory and three text files named "file1.txt," "file2.txt," and "file3.txt."
+2. Proper use of chmod commands (1 point): The student should demonstrate the correct syntax for the chmod command, using the appropriate symbols (u, g, o) and permissions (r, w, x) for each file.
+3. Appropriate permissions for file1.txt (1 point): The student will get a point if "file1.txt" has the correct permissions: readable, writable, and executable by the owner, and readable by others.
+4. Appropriate permissions for file2.txt (1 point): The student will get a point if "file2.txt" has the correct permissions: readable and writable by the owner only.
+5. Appropriate permissions for file3.txt (1 point): The student will get a point if "file3.txt" has the correct permissions: readable, writable, and executable by the owner and the group.
+
+Note: The student must meet all five requirements to receive the full 5 points. If any condition is not met, they will not receive points for that item. Any partial completion or effort is not considered for awarding non-integer points.

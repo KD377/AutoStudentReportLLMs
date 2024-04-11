@@ -1,8 +1,0 @@
-Sure, here are the grading criteria for the given task:
-
-1. **Creation of TestUser (0-1 point):** The student will receive 0 points if they do not provide evidence of creating a new user named "TestUser" on their Linux system. They will receive 1 point if they provide clear evidence of creating the user, such as by including the output of the "id" or "finger" command for the TestUser.
-2. **Adding TestUser to SecureGroup (0-1 point):** The student will receive 0 points if they do not provide evidence of adding "TestUser" to a group named "SecureGroup." They will receive 1 point if they provide clear evidence of adding the user to the group, such as by including the output of the "groups" command for TestUser.
-3. **File Permissions for SecureGroup (0-2 points):** The student will receive 0 points if they do not provide evidence of setting the correct permissions for the "SecureFiles" directory for the "SecureGroup" group. They will receive 1 point if they provide evidence that the "SecureGroup" group has read access to all files in the "SecureFiles" directory. They will receive 2 points if they provide evidence that the "SecureGroup" group has both read and write access to all files in the "SecureFiles" directory.
-4. **Modification Attempt (0-1 point):** The student will receive 0 points if they do not provide evidence of attempting to modify "file3.txt" inside the "SecureFiles" directory while logged in as "TestUser." They will receive 1 point if they provide evidence of attempting to modify the file, such as by including the output of the "ls -l" command before and after the attempted modification.
-
-Note: The grading criteria above are guidelines and can be adjusted based on the specific requirements of the instructor or institution.

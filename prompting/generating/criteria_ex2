@@ -1,0 +1,9 @@
+Sure, here are the grading criteria for the task "User Groups and File Access Scenario" for the report "Security Analysis of File Permissions and User Access in Linux Operating Systems":
+
+1. Correct creation of a new user named "TestUser" (1 point)
+2. Successful addition of "TestUser" to the group "SecureGroup" (1 point)
+3. Proper configuration of read and write access to all files inside the "SecureFiles" directory for the group "SecureGroup" (1 point)
+4. Accurate logging in as "TestUser" (1 point)
+5. Valid attempt to modify "file3.txt" inside the "SecureFiles" directory (1 point)
+
+Note: Each requirement must be fulfilled completely to receive 1 point. Any incomplete requirement will result in 0 points for that criterion.

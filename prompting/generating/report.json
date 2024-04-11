@@ -1,0 +1,20 @@
+{
+    "Exercise_1": {
+        "Grades": {
+            "points": 3,
+            "description": "The student received 1 point for creating the directory and files, 1 point for chmod commands, and 1 point for file1.txt permissions. However, points were not awarded for file2.txt and file3.txt permissions as the criteria were not met."
+        }
+    },
+    "Exercise_2": {
+        "Grades": {
+            "points": 4,
+            "description": "The student correctly created a new user, added it to the group, and demonstrated understanding of why 'TestUser' was unable to modify the file. However, the answer did not explicitly confirm successful addition to the group or provide a valid attempt to modify the file."
+        }
+    },
+    "Exercise_3": {
+        "Grades": {
+            "points": 5,
+            "description": "The student fully met all the criteria, demonstrating the ability to enable file access logging, create a log file, access 'file1.txt' from another user account, check the log file, and provide a clear and coherent explanation."
+        }
+    }
+}
