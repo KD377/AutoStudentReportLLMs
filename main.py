@@ -28,10 +28,7 @@ path = "./reports/reportsC/expC_no2.docx"
 
 # Read file and prepare data
 documents, metadatas = fr.read_file(path, section_start_pattern,3)
-# for i in range(len(documents)):
-#     if metadatas[i]["Exercise_number"] == 1:
-#         print(documents[i])
-# if db does not exist create one
+print(metadatas)
 if not os.path.exists(CHROMA_DATA_PATH):
     db.build_chroma_collection(
         CHROMA_DATA_PATH,

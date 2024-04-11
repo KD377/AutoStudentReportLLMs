@@ -56,7 +56,7 @@ def extract_exercises(sections, exercise_number):
 
 def read_file(file_path, patterns, number_of_exercises):
     sections = split_document_into_sections(read_docx_file(file_path), patterns)
-
+    author = sections["Author:"][0]
     exercises = extract_exercises(sections, number_of_exercises)
     del sections["3. Research:"]
     sections.update(exercises)
@@ -101,6 +101,7 @@ def read_file(file_path, patterns, number_of_exercises):
                 meta["Type"] = "description"
             meta["Global_sentence_number"] = i
             meta["Local_sentence_number"] = j
+            meta["Author"] = author[len("Author: "):].strip()
 
             metadatas.append(meta)
 
