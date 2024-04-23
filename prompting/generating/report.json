@@ -2,25 +2,25 @@
     "Experiment aim": {
         "Grades": {
             "points": 5,
-            "description": "The student's answer is clear, specific, and relevant to the topic. It identifies expected outcomes, connects the exercises, and appears feasible."
+            "description": "The student's answer is clear, specific, and relevant to the topic. It identifies expected outcomes, connects the exercises, and demonstrates feasibility."
         }
     },
     "Theoretical background": {
         "Grades": {
-            "points": 4,
-            "description": "The student demonstrated a clear understanding of file permissions, user groups, and file access logging. They also explained the chmod commands used for setting file permissions. However, they did not provide an example or explanation of file access logging, and they did not demonstrate an understanding of Linux system architecture beyond file permissions."
+            "points": 3,
+            "description": "The student demonstrated an understanding of file permissions and their effect on user access, explained user groups and file access, and mentioned file access logging. However, they did not explain the chmod commands used or provide a clear understanding of Linux system architecture."
         }
     },
     "Exercise_1": {
         "Grades": {
             "points": 5,
-            "description": "The student has correctly created the directory and files, used the appropriate chmod commands with the correct symbols and permissions, and set the appropriate permissions for all three files according to the criteria."
+            "description": "The student has correctly created the directory and files, used the appropriate chmod commands, and set the correct permissions for all three files according to the criteria."
         }
     },
     "Exercise_2": {
         "Grades": {
             "points": 4,
-            "description": "The student correctly created a new user, added it to the group, and explained why 'TestUser' was unable to modify 'file3.txt'. However, thestudent did not explicitly show the command to add 'TestUser' to 'SecureGroup'. Also, the student failed to demonstrate setting proper permissions that allow 'SecureGroup' to modify files inside the 'SecureFiles' directory."
+            "description": "The student correctly created a new user named 'TestUser' and added it to the 'SecureGroup'. They also configured read and write access to the 'SecureFiles' directory for the group 'SecureGroup'. The student was able to log in as 'TestUser' and attempted to modify 'file3.txt' inside the 'SecureFiles' directory, but was unsuccessful due to missing execute permissions for the group on the 'SecureFiles' directory. However, this issue was acknowledged by the student and a resolution was suggested, which would have allowed 'TestUser' to modify 'file3.txt'."
         }
     },
     "Exercise_3": {
@@ -32,7 +32,7 @@
     "Conclusions": {
         "Grades": {
             "points": 5,
-            "description": "The student's answer effectively restates the problem, summarizes the findings, interprets the results, and suggests areas for future research. The response is well-organized and insightful, demonstrating a clear understanding of the topic and its implications. However, it could have explicitly mentioned any limitations encountered during the study."
+            "description": "The student effectively restated the problem and summarized the main findings from each exercise. They interpreted the results and identified potential security risks, while also suggesting areas for future research. Limitations of the study were not explicitly mentioned, but this did not significantly detract from the overall quality of the conclusion."
         }
     }
 }
