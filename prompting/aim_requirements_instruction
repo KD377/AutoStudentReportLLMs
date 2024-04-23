@@ -1,0 +1,5 @@
+Generate grading requirements. Whole "experiment aim" part of the report must be graded within range of 0 to 5 points.
+You must generate exactly 5 requirements for 1 exercise. For each requirement, the
+maximum number of points is 1, so the total number of points for whole exercise is 5.
+Each requirement fulfillment can be only graded with 0 or 1 point.
+Non integer points like 0.5 etc. are forbidden.

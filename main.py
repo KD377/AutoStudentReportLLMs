@@ -7,7 +7,7 @@ import os
 from chromadb.utils import embedding_functions
 from groqmodel import GROQModel
 
-
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
 CHROMA_DATA_PATH = "chroma_data"
 EMBED_MODEL = "sentence-transformers/paraphrase-MiniLM-L6-v2"
 COLLECTION_NAME = "demo_docs"
@@ -48,14 +48,17 @@ repository = repository.DocumentsRepository(collection)
 
 model = GROQModel(api_key, "./prompting", repository)
 
-# title extraction
+
 title = repository.get_title()
 number_of_tasks = 3
-
+ex1 = repository.get_task_description(1)
+ex2 = repository.get_task_description(2)
+ex3 = repository.get_task_description(3)
 # model.generate_grading_criteria(documents, metadatas, title, 3)
-# model.generate_aim_criteria(documents, metadatas, title)
-
-completion = model.grade_tasks(3)
-
-report = model.generate_report(completion, 3)
+tasks_completion = model.grade_tasks(3)
+aim_tb_completion = model.grade_aim_and_tb()
+# model.generate_criteria(title, "Experiment aim", ex1, ex2, ex3)
+# model.generate_criteria(title, "Theoretical background", ex1, ex2, ex3)
+# model.generate_criteria(title, "Conclusions", ex1, ex2, ex3)
+report = model.generate_report(aim_tb_completion, tasks_completion, 3)
 

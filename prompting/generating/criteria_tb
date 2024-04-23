@@ -1,0 +1,9 @@
+Grading Criteria for "Theoretical Background" Section:
+
+1. Explanation of chmod commands used: The student should clearly explain the chmod commands used to set the specified permissions for each file. (1 point)
+2. Understanding of file permissions: The student should demonstrate an understanding of how the permissions of each file affect user access. (1 point)
+3. Explanation of user groups and file access: The student should explain the concept of user groups and how it affects file access, specifically in the context of the "SecureGroup" and the "SecureFiles" directory. (1 point)
+4. Explanation of file access logging: The student should explain the concept of file access logging and how it is used to record all file access events. (1 point)
+5. Understanding of Linux system architecture: The student should demonstrate an understanding of the Linux system architecture, including the concepts of users, groups, and file permissions. (1 point)
+
+Note: Each criterion is worth 1 point, making the total number of points for this section 5. In order to receive a point, the student must fulfill the requirement as described, with no exceptions. Partial points cannot be awarded.
