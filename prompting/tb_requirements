@@ -1,6 +1,6 @@
-You will be given the title, experiment aim section and three exercise descriptions of student`s report.
+You will be given the title, theoretical background section and three exercise descriptions of student`s report.
 
-Your task is to generate grading criteria for "experiment aim" section based on your knowledge.
+Your task is to generate grading criteria for "theoretical background" section based on your knowledge.
 
 The section will be graded on the scale from 0-5 points.
 

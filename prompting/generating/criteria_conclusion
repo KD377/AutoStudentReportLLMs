@@ -1,0 +1,5 @@
+1. Clear restatement of the problem: The conclusion should restate the purpose and objectives of the report, indicating that the security analysis of file permissions and user access in Linux operating systems was conducted. (1 point)
+2. Summary of findings: The conclusion should summarize the main findings from each exercise, highlighting the chmod commands used, how the permissions affect user access, and the effects of user groups and file access. (1 point)
+3. Interpretation of results: The conclusion should interpret the results, explaining what the findings mean in terms of security and user access. This may include identifying potential security risks and providing recommendations for addressing them. (1 point)
+4. Limitations: The conclusion should mention any limitations of the study, such as those related to the scope of the study, the methodology used, or any assumptions made. (1 point)
+5. Implications for future research: The conclusion should suggest areas for future research, identifying questions or issues that were not addressed in the report but that may be worth pursuing in future studies. (1 point)

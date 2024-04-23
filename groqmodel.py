@@ -40,6 +40,11 @@ class GROQModel:
         with open(file_path, "w") as file:
             file.write(criteria)
 
+    def save_aim_tb_criteria(self, criteria, name):
+        file_path = self.generating_directory + name
+        with open(file_path, "w") as file:
+            file.write(criteria)
+
     def extract_tasks(self, number_of_tasks):
         tasks = {}
 
@@ -50,6 +55,11 @@ class GROQModel:
 
     def read_criteria(self, number):
         with open(self.generating_directory + "/criteria_ex" + str(number), "r") as file:
+            context = file.read()
+        return context
+
+    def read_criteria_all(self, file):
+        with open(self.generating_directory + file, "r") as file:
             context = file.read()
         return context
 
@@ -82,6 +92,7 @@ class GROQModel:
         return None
 
     def grade_tasks(self, number_of_tasks):
+        global final_grade
         with open("./prompting/grading", "r") as file:
             context = file.read()
         completions = []
@@ -112,42 +123,111 @@ class GROQModel:
 
             completions.append(final_grade)
             i += 1
+        criteria_c = self.read_criteria_all("/criteria_conclusion")
+        answer_c = self.repository.get_conclusions()
+        prompt_c = context.format("Conclusions", criteria_c, answer_c, final_grade)
+        chat_completion = self.create_completion(prompt_c, "Based on the criteria above and grades with description"
+                                                           "for the excercises performed in the earlier part of the "
+                                                           "report, "
+                                                           "evaluate the answer and provide a final grading"
+                                                           " in JSON format as follows: "
+                                                           "{\"points\": \"X\", \"description\": \"Y\"},"
+                                                           "where X is the total points awarded and Y is a "
+                                                           "maximum 2 sentence rationale. Let your answer be "
+                                                           "only JSON without any other text")
 
+        response = chat_completion.choices[0].message.content
+        json_data = self.extract_json_from_response(response)
+
+        if json_data:
+            final_grade = {"points": int(json_data.get("points", 0)),
+                           "description": json_data.get("description", "")}
+        else:
+            print("No valid JSON found in the AI response:", response)
+            final_grade = {"points": 0,
+                           "description": "The AI response did not contain valid JSON grading rationale."}
+        completions.append(final_grade)
         return completions
 
-    def generate_report(self, grades, number_of_tasks):
-        report = {}
+    def grade_aim_and_tb(self):
+        with open("./prompting/grading", "r") as file:
+            context = file.read()
+        completions = []
+        criteria_aim = self.read_criteria_all("/criteria_aim")
+        criteria_tb = self.read_criteria_all("/criteria_tb")
+        answer_aim = self.repository.get_experiment_aim()
+        answer_tb = self.repository.get_theoretical_background()
+        prompt_aim = context.format("Experiment aim", criteria_aim, answer_aim)
+        prompt_tb = context.format("Theoretical background", criteria_tb, answer_tb)
+        prompts = [prompt_aim, prompt_tb]
+        for prompt in prompts:
+            chat_completion = self.create_completion(prompt, "Based on the criteria above, "
+                                                             "evaluate the answer and provide a final grading"
+                                                             " in JSON format as follows: "
+                                                             "{\"points\": \"X\", \"description\": \"Y\"},"
+                                                             "where X is the total points awarded and Y is a "
+                                                             "maximum 2 sentence rationale. Let your answer be "
+                                                             "only JSON without any other text")
+            response = chat_completion.choices[0].message.content
+            json_data = self.extract_json_from_response(response)
+            if json_data:
+                final_grade = {"points": int(json_data.get("points", 0)),
+                               "description": json_data.get("description", "")}
+            else:
+                print("No valid JSON found in the AI response:", response)
+                final_grade = {"points": 0,
+                               "description": "The AI response did not contain valid JSON grading rationale."}
+            completions.append(final_grade)
+        return completions
 
-        for i in range(number_of_tasks):
-            report[f"Exercise_{i + 1}"] = {
-                "Grades": grades[i],
+    def generate_report(self, aim_tb_grades, task_grades, number_of_tasks):
+        report = {"Experiment aim": {
+            "Grades": aim_tb_grades[0],
+        },
+            "Theoretical background": {
+                "Grades": aim_tb_grades[1],
             }
+        }
+
+        for i in range(number_of_tasks + 1):
+            if i < number_of_tasks:
+                report[f"Exercise_{i + 1}"] = {
+                    "Grades": task_grades[i],
+                }
+            else:
+                report["Conclusions"] = {
+                    "Grades": task_grades[i],
+                }
 
         with open(f"{self.generating_directory}/report.json", "w") as file:
             json.dump(report, file, indent=4)
 
         return report
 
-    def generate_aim_criteria(self, documents, metadata, title):
-        with open(self.prompt_directory + "/aim_requirements", "r") as file:
-            context = file.read()
+    def generate_criteria(self, title, header, ex1, ex2, ex3):
+        if header == "Experiment aim":
+            with open(self.prompt_directory + "/aim_requirements", "r") as file:
+                content = file.read()
+            with open(self.prompt_directory + "/aim_requirements_instruction", "r") as file2:
+                user_prompt = file2.read()
+            chat_completion = self.create_completion(content.format(title, header, ex1, ex2, ex3), user_prompt)
+            criteria = chat_completion.choices[0].message.content
+            self.save_aim_tb_criteria(criteria, "/criteria_aim")
+        elif header == "Theoretical background":
+            with open(self.prompt_directory + "/tb_requirements", "r") as file:
+                content = file.read()
+            with open(self.prompt_directory + "/tb_requirements_instruction", "r") as file2:
+                user_prompt = file2.read()
+            chat_completion = self.create_completion(content.format(title, header, ex1, ex2, ex3), user_prompt)
+            criteria = chat_completion.choices[0].message.content
+            self.save_aim_tb_criteria(criteria, "/criteria_tb")
 
-        aim = self.extract_aim(documents, metadata)
-
-        chat_completion = self.client.chat.completions.create(
-            messages=[
-                {"role": "system", "content": context.format(title, aim)},
-                {"role": "user",
-                 "content": "Generate grading requirements. Whole exercise must be graded within range of 0 to 5 "
-                            "points. For each "
-                            "requirement, the maximum number of points is 1, so the total number of points for "
-                            "whole exercise is 5. Each requirement fulfillment can be only graded with 0 or 1 "
-                            "point. Non integer points like 0.5 etc. are forbidden."}
-            ],
-            model="mixtral-8x7b-32768",
-        )
-        criteria = chat_completion.choices[0].message.content
-        file_path = self.generating_directory + "/criteria_aim"
-        with open(file_path, "w") as file:
-            file.write(criteria)
+        elif header == "Conclusions":
+            with open(self.prompt_directory + "/conclusion_requirements", "r") as file:
+                content = file.read()
+            with open(self.prompt_directory + "/conclusion_requirements_instruction", "r") as file2:
+                user_prompt = file2.read()
+            chat_completion = self.create_completion(content.format(title, header, ex1, ex2, ex3), user_prompt)
+            criteria = chat_completion.choices[0].message.content
+            self.save_aim_tb_criteria(criteria, "/criteria_conclusion")
 

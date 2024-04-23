@@ -1,20 +1,38 @@
 {
+    "Experiment aim": {
+        "Grades": {
+            "points": 5,
+            "description": "The student's answer is clear, specific, and relevant to the topic. It identifies expected outcomes, connects the exercises, and appears feasible."
+        }
+    },
+    "Theoretical background": {
+        "Grades": {
+            "points": 4,
+            "description": "The student demonstrated a clear understanding of file permissions, user groups, and file access logging. They also explained the chmod commands used for setting file permissions. However, they did not provide an example or explanation of file access logging, and they did not demonstrate an understanding of Linux system architecture beyond file permissions."
+        }
+    },
     "Exercise_1": {
         "Grades": {
             "points": 5,
-            "description": "The student has met all the criteria, setting up the directory and adjusting the permissions for all files correctly according to the task requirements."
+            "description": "The student has correctly created the directory and files, used the appropriate chmod commands with the correct symbols and permissions, and set the appropriate permissions for all three files according to the criteria."
         }
     },
     "Exercise_2": {
         "Grades": {
-            "points": 5,
-            "description": "The student fully satisfied all the criteria, demonstrating correct command usage to create a user, add them to a group, configure file access, and log in as the new user, but missed granting execute permissions to the group for the directory."
+            "points": 4,
+            "description": "The student correctly created a new user, added it to the group, and explained why 'TestUser' was unable to modify 'file3.txt'. However, thestudent did not explicitly show the command to add 'TestUser' to 'SecureGroup'. Also, the student failed to demonstrate setting proper permissions that allow 'SecureGroup' to modify files inside the 'SecureFiles' directory."
         }
     },
     "Exercise_3": {
         "Grades": {
             "points": 5,
-            "description": "The student demonstrated a clear understanding of the task and provided detailed instructions on enabling file access logging, creating a log file, accessing the specified file, and checking the log file for the recorded event. The answer is well-organized and free from grammatical errors."
+            "description": "The student demonstrated the ability to enable file access logging, create a log file, access 'file1.txt' from another user account, check the log file for the recorded event, and provided a clear and coherent explanation."
+        }
+    },
+    "Conclusions": {
+        "Grades": {
+            "points": 5,
+            "description": "The student's answer effectively restates the problem, summarizes the findings, interprets the results, and suggests areas for future research. The response is well-organized and insightful, demonstrating a clear understanding of the topic and its implications. However, it could have explicitly mentioned any limitations encountered during the study."
         }
     }
 }
