@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 import os
 from chromadb.utils import embedding_functions
 from groqmodel import GROQModel
+from database import *
 
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 CHROMA_DATA_PATH = "chroma_data"
@@ -61,4 +62,6 @@ aim_tb_completion = model.grade_aim_and_tb()
 # model.generate_criteria(title, "Theoretical background", ex1, ex2, ex3)
 # model.generate_criteria(title, "Conclusions", ex1, ex2, ex3)
 report = model.generate_report(aim_tb_completion, tasks_completion, 3)
+
+# create_database()
 
