@@ -2,37 +2,37 @@
     "Experiment aim": {
         "Grades": {
             "points": 5,
-            "description": "The student's answer is clear, specific, and relevant to the topic. It identifies expected outcomes, connects the exercises, and demonstrates feasibility."
+            "description": "The student's answer clearly states the aim of the experiment, relating to file permissions and user access in Linux. The expected outcomes and connection between exercises are well identified, and the aim is feasible given the provided tasks and resources."
         }
     },
     "Theoretical background": {
         "Grades": {
-            "points": 3,
-            "description": "The student demonstrated an understanding of file permissions and their effect on user access, explained user groups and file access, and mentioned file access logging. However, they did not explain the chmod commands used or provide a clear understanding of Linux system architecture."
+            "points": 4,
+            "description": "The student demonstrated a clear understanding of file permissions and the chmod commands used to set the specified permissions for each file. They also explained the concept of user groups and file access in the context of 'SecureGroup' and 'SecureFiles' directory. However, the student did not explain file access logging and Linux system architecture."
         }
     },
     "Exercise_1": {
         "Grades": {
             "points": 5,
-            "description": "The student has correctly created the directory and files, used the appropriate chmod commands, and set the correct permissions for all three files according to the criteria."
+            "description": "The student has correctly created the directory and files, used the chmod commands appropriately, and set the correct permissions for all three files according to the criteria."
         }
     },
     "Exercise_2": {
         "Grades": {
             "points": 4,
-            "description": "The student correctly created a new user named 'TestUser' and added it to the 'SecureGroup'. They also configured read and write access to the 'SecureFiles' directory for the group 'SecureGroup'. The student was able to log in as 'TestUser' and attempted to modify 'file3.txt' inside the 'SecureFiles' directory, but was unsuccessful due to missing execute permissions for the group on the 'SecureFiles' directory. However, this issue was acknowledged by the student and a resolution was suggested, which would have allowed 'TestUser' to modify 'file3.txt'."
+            "description": "The student received full points for creating a new user, adding the user to the group, and logging in as the new user. However, the student only received partial credit for configuring file access because the execute permission was missing for the 'SecureFiles' directory. Although the student identified the issue correctly, they only partially solved it by granting read and write permissions to the directory, but not the execute permission."
         }
     },
     "Exercise_3": {
         "Grades": {
             "points": 5,
-            "description": "The student demonstrated the ability to enable file access logging, create a log file, access 'file1.txt' from another user account, check the log file for the recorded event, and provided a clear and coherent explanation."
+            "description": "The student demonstrated the ability to enable file access logging for the specified directory, created a log file to record all file access events, accessed 'file1.txt' from another user account, checked the log file for the recorded event, and provided a clear and coherent explanation for their process."
         }
     },
     "Conclusions": {
         "Grades": {
             "points": 5,
-            "description": "The student effectively restated the problem and summarized the main findings from each exercise. They interpreted the results and identified potential security risks, while also suggesting areas for future research. Limitations of the study were not explicitly mentioned, but this did not significantly detract from the overall quality of the conclusion."
+            "description": "The answer provides a clear restatement of the problem, summarizes the findings, interprets the results, mentions limitations, and suggests areas for future research. The response effectively demonstrates an understanding of the importance of file access control in Linux."
         }
     }
 }

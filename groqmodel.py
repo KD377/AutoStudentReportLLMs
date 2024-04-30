@@ -91,24 +91,24 @@ class GROQModel:
                             pass
         return None
 
-    def grade_tasks(self, number_of_tasks):
+    def grade_tasks(self, doc_id):
         global final_grade
         with open("./prompting/grading", "r") as file:
             context = file.read()
         completions = []
-        tasks = self.extract_tasks(number_of_tasks)
-        i = 0
-        for task in tasks:
-            criteria = self.read_criteria(i+1)
-            answer = self.repository.get_task_answer(i+1)
+
+        tasks = self.extract_tasks(3)
+        for i, task in enumerate(tasks):
+            criteria = self.read_criteria(i + 1)
+            answer = self.repository.get_task_answer(doc_id, i + 1)
             prompt = context.format(task, criteria, answer)
-            chat_completion = self.create_completion(prompt,"Based on the criteria above, "
-                                                            "evaluate the answer and provide a final grading"
-                                                            " in JSON format as follows: "
-                                                            "{\"points\": \"X\", \"description\": \"Y\"},"
-                                                            "where X is the total points awarded and Y is a "
-                                                            "maximum 2 sentence rationale. Let your answer be "
-                                                            "only JSON without any other text")
+            chat_completion = self.create_completion(prompt, "Based on the criteria above, "
+                                                             "evaluate the answer and provide a final grading"
+                                                             " in JSON format as follows: "
+                                                             "{\"points\": \"X\", \"description\": \"Y\"},"
+                                                             "where X is the total points awarded and Y is a "
+                                                             "maximum 2 sentence rationale. Let your answer be "
+                                                             "only JSON without any other text")
 
             response = chat_completion.choices[0].message.content
             json_data = self.extract_json_from_response(response)
@@ -122,9 +122,10 @@ class GROQModel:
                                "description": "The AI response did not contain valid JSON grading rationale."}
 
             completions.append(final_grade)
-            i += 1
+
+        # Handle Conclusions separately, assuming it's a different type of task
         criteria_c = self.read_criteria_all("/criteria_conclusion")
-        answer_c = self.repository.get_conclusions()
+        answer_c = self.repository.get_conclusions(doc_id)  # Pass doc_id to get_conclusions
         prompt_c = context.format("Conclusions", criteria_c, answer_c, final_grade)
         chat_completion = self.create_completion(prompt_c, "Based on the criteria above and grades with description"
                                                            "for the excercises performed in the earlier part of the "
@@ -146,20 +147,25 @@ class GROQModel:
             print("No valid JSON found in the AI response:", response)
             final_grade = {"points": 0,
                            "description": "The AI response did not contain valid JSON grading rationale."}
+
         completions.append(final_grade)
         return completions
 
-    def grade_aim_and_tb(self):
+    def grade_aim_and_tb(self, doc_id):
         with open("./prompting/grading", "r") as file:
             context = file.read()
         completions = []
+
         criteria_aim = self.read_criteria_all("/criteria_aim")
         criteria_tb = self.read_criteria_all("/criteria_tb")
-        answer_aim = self.repository.get_experiment_aim()
-        answer_tb = self.repository.get_theoretical_background()
+
+        answer_aim = self.repository.get_experiment_aim(doc_id)
+        answer_tb = self.repository.get_theoretical_background(doc_id)
+
         prompt_aim = context.format("Experiment aim", criteria_aim, answer_aim)
         prompt_tb = context.format("Theoretical background", criteria_tb, answer_tb)
         prompts = [prompt_aim, prompt_tb]
+
         for prompt in prompts:
             chat_completion = self.create_completion(prompt, "Based on the criteria above, "
                                                              "evaluate the answer and provide a final grading"
