@@ -94,11 +94,10 @@ class GROQModel:
         for i, task in enumerate(tasks):
             criteria = self.read_criteria(i + 1)
             answer = self.repository.get_task_answer(doc_id, i + 1)
-            print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+            print("!!!!!!!!!!!CRITERIA!!!!!!!!!!!!!")
             print(criteria)
-            print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+            print("!!!!!!!!!!!ASNWER!!!!!!!!!")
             print(answer)
-            print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
             prompt = context.format(task, criteria, answer)
             chat_completion = self.create_completion(prompt, "Based on the criteria above, "
                                                              "evaluate the answer and provide a final grading"
@@ -115,15 +114,14 @@ class GROQModel:
                 final_grade = {"points": int(json_data.get("points", 0)),
                                "description": json_data.get("description", "")}
             else:
-                # print("No valid JSON found in the AI response:", response)
+                print("No valid JSON found in the AI response:", response)
                 final_grade = {"points": 0,
                                "description": "The AI response did not contain valid JSON grading rationale."}
 
             completions.append(final_grade)
 
-        # Handle Conclusions separately, assuming it's a different type of task
         criteria_c = self.read_criteria_all("/criteria_conclusion")
-        answer_c = self.repository.get_conclusions(doc_id)  # Pass doc_id to get_conclusions
+        answer_c = self.repository.get_conclusions(doc_id)
         prompt_c = context.format("Conclusions", criteria_c, answer_c, final_grade)
         chat_completion = self.create_completion(prompt_c, "Based on the criteria above and grades with description"
                                                            "for the excercises performed in the earlier part of the "
@@ -142,7 +140,7 @@ class GROQModel:
             final_grade = {"points": int(json_data.get("points", 0)),
                            "description": json_data.get("description", "")}
         else:
-            # print("No valid JSON found in the AI response:", response)
+            print("No valid JSON found in the AI response:", response)
             final_grade = {"points": 0,
                            "description": "The AI response did not contain valid JSON grading rationale."}
 
@@ -184,7 +182,7 @@ class GROQModel:
             completions.append(final_grade)
         return completions
 
-    def generate_report(self, doc_id, aim_tb_grades, task_grades, number_of_tasks):
+    def generate_report(self, doc_id, aim_tb_grades, task_grades, number_of_tasks, name):
         report = {"Experiment aim": {
             "Grades": aim_tb_grades[0],
         },
@@ -203,7 +201,7 @@ class GROQModel:
                     "Grades": task_grades[i],
                 }
 
-        with open(f"{self.generating_directory}/{doc_id}_report.json", "w") as file:
+        with open(f"{self.generating_directory}/{doc_id}_{name}_report.json", "w") as file:
             json.dump(report, file, indent=4)
 
         return report
