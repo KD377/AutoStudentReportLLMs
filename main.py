@@ -37,15 +37,15 @@ embedding_func = embedding_functions.SentenceTransformerEmbeddingFunction(
 collection = client.get_or_create_collection(name=COLLECTION_NAME, embedding_function=embedding_func)
 try:
     ids = [f"id{i}" for i in range(len(all_documents))]
-
-    collection.add(
-        ids=ids,
-        documents=all_documents,
-        metadatas=all_metadatas,
-    )
-    print("All documents added successfully.")
+    for i, (document, metadata) in enumerate(zip(all_documents, all_metadatas)):
+        collection.add(
+            ids=[f"{ids[i]}_{j}" for j in range(len(document))],
+            documents=document,
+            metadatas=metadata,
+        )
+    print("All documents and their metadata added successfully.")
 except Exception as e:
-    print("Error adding documents:", e)
+    print("Error adding documents and metadata:", e)
 
 # print("Number of documents read:", len(all_documents))
 # print("Number of metadata entries:", len(all_metadatas))
@@ -57,7 +57,6 @@ except Exception as e:
 # repository class contains different queries
 repository = repository.DocumentsRepository(collection)
 model = GROQModel(api_key, "./prompting", repository)
-
 
 # title = repository.get_title()
 # number_of_tasks = 3
@@ -73,19 +72,17 @@ model = GROQModel(api_key, "./prompting", repository)
 # # model.generate_criteria(title, "Conclusions", ex1, ex2, ex3)
 # report = model.generate_report(aim_tb_completion, tasks_completion, 3)
 
-# conclusions = query_conclusions(client, "reportsCnew")
-# print(conclusions)
+print(range(len(all_documents)))
 
 for doc_id in range(len(all_documents)):
-    title = repository.get_title(doc_id)
     number_of_tasks = 3
     ex1 = repository.get_task_description(doc_id, 1)
+    print(ex1)
     ex2 = repository.get_task_description(doc_id, 2)
     ex3 = repository.get_task_description(doc_id, 3)
     tasks_completion = model.grade_tasks(doc_id)
     aim_tb_completion = model.grade_aim_and_tb(doc_id)
-    report = model.generate_report(aim_tb_completion, tasks_completion, number_of_tasks)
+    report = model.generate_report(doc_id, aim_tb_completion, tasks_completion, number_of_tasks)
     print(f"Report for document {doc_id}:", report)
-
 
 # create_database()

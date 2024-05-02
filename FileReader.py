@@ -116,13 +116,12 @@ def read_all_files(folder_path, patterns, number_of_exercises):
     all_documents = []
     all_metadatas = []
 
-    # List all DOCX files in the specified directory
     files = [f for f in os.listdir(folder_path) if f.endswith('.docx')]
 
     for file in files:
         file_path = os.path.join(folder_path, file)
-        documents, metadatas = read_file(file_path, patterns, number_of_exercises)
-        all_documents.extend(documents)
-        all_metadatas.extend(metadatas)
+        document, metadata = read_file(file_path, patterns, number_of_exercises)
+        all_documents.append(document)
+        all_metadatas.append(metadata)
 
     return all_documents, all_metadatas
