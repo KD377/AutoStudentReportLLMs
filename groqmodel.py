@@ -45,11 +45,11 @@ class GROQModel:
         with open(file_path, "w") as file:
             file.write(criteria)
 
-    def extract_tasks(self, number_of_tasks):
+    def extract_tasks(self, doc_id, number_of_tasks):
         tasks = {}
 
-        for i in range(number_of_tasks):
-            tasks["Exercise_" + str(i + 1)] = self.repository.get_task_description(i + 1)
+        for i in range(1, number_of_tasks + 1):
+            tasks["Exercise_" + str(i)] = self.repository.get_task_description(doc_id, i)
 
         return tasks
 
@@ -63,52 +63,49 @@ class GROQModel:
             context = file.read()
         return context
 
-    def get_task_answers(self, number_of_tasks):
+    def get_task_answers(self, doc_id, number_of_tasks):
         tasks = {}
 
-        for i in range(number_of_tasks):
-            tasks["Exercise_" + str(i + 1)] = self.repository.get_task_answer(i + 1)
+        for i in range(1, number_of_tasks + 1):
+            tasks["Exercise_" + str(i)] = self.repository.get_task_answer(doc_id, i)
 
         return tasks
 
     def extract_json_from_response(self, response):
         try:
-            return json.loads(response)
+            json_data = json.loads(response)
+            return json_data
         except json.JSONDecodeError:
             cleaned_response = re.sub(r'^.*?{', '{', response, flags=re.DOTALL)
             try:
                 potential_json = json.loads(cleaned_response)
                 return potential_json
             except json.JSONDecodeError:
-                json_pattern = r'\{(?:[^{}]|(?R))*\}'
-                matches = re.findall(json_pattern, response, re.DOTALL)
-                if matches:
-                    longest_match = max(matches, key=len)
-                    if isinstance(longest_match, str):
-                        try:
-                            return json.loads(longest_match)
-                        except json.JSONDecodeError:
-                            pass
-        return None
+                print("Error: Unable to extract valid JSON from response.")
+                return None
 
-    def grade_tasks(self, number_of_tasks):
+    def grade_tasks(self, doc_id):
         global final_grade
         with open("./prompting/grading", "r") as file:
             context = file.read()
         completions = []
-        tasks = self.extract_tasks(number_of_tasks)
-        i = 0
-        for task in tasks:
-            criteria = self.read_criteria(i+1)
-            answer = self.repository.get_task_answer(i+1)
+
+        tasks = self.extract_tasks(doc_id, 3)
+        for i, task in enumerate(tasks):
+            criteria = self.read_criteria(i + 1)
+            answer = self.repository.get_task_answer(doc_id, i + 1)
+            print("!!!!!!!!!!!CRITERIA!!!!!!!!!!!!!")
+            print(criteria)
+            print("!!!!!!!!!!!ASNWER!!!!!!!!!")
+            print(answer)
             prompt = context.format(task, criteria, answer)
-            chat_completion = self.create_completion(prompt,"Based on the criteria above, "
-                                                            "evaluate the answer and provide a final grading"
-                                                            " in JSON format as follows: "
-                                                            "{\"points\": \"X\", \"description\": \"Y\"},"
-                                                            "where X is the total points awarded and Y is a "
-                                                            "maximum 2 sentence rationale. Let your answer be "
-                                                            "only JSON without any other text")
+            chat_completion = self.create_completion(prompt, "Based on the criteria above, "
+                                                             "evaluate the answer and provide a final grading"
+                                                             " in JSON format as follows: "
+                                                             "{\"points\": \"X\", \"description\": \"Y\"},"
+                                                             "where X is the total points awarded and Y is a "
+                                                             "maximum 2 sentence rationale. Let your answer be "
+                                                             "only JSON without any other text")
 
             response = chat_completion.choices[0].message.content
             json_data = self.extract_json_from_response(response)
@@ -122,9 +119,9 @@ class GROQModel:
                                "description": "The AI response did not contain valid JSON grading rationale."}
 
             completions.append(final_grade)
-            i += 1
+
         criteria_c = self.read_criteria_all("/criteria_conclusion")
-        answer_c = self.repository.get_conclusions()
+        answer_c = self.repository.get_conclusions(doc_id)
         prompt_c = context.format("Conclusions", criteria_c, answer_c, final_grade)
         chat_completion = self.create_completion(prompt_c, "Based on the criteria above and grades with description"
                                                            "for the excercises performed in the earlier part of the "
@@ -146,20 +143,25 @@ class GROQModel:
             print("No valid JSON found in the AI response:", response)
             final_grade = {"points": 0,
                            "description": "The AI response did not contain valid JSON grading rationale."}
+
         completions.append(final_grade)
         return completions
 
-    def grade_aim_and_tb(self):
+    def grade_aim_and_tb(self, doc_id):
         with open("./prompting/grading", "r") as file:
             context = file.read()
         completions = []
+
         criteria_aim = self.read_criteria_all("/criteria_aim")
         criteria_tb = self.read_criteria_all("/criteria_tb")
-        answer_aim = self.repository.get_experiment_aim()
-        answer_tb = self.repository.get_theoretical_background()
+
+        answer_aim = self.repository.get_experiment_aim(doc_id)
+        answer_tb = self.repository.get_theoretical_background(doc_id)
+
         prompt_aim = context.format("Experiment aim", criteria_aim, answer_aim)
         prompt_tb = context.format("Theoretical background", criteria_tb, answer_tb)
         prompts = [prompt_aim, prompt_tb]
+
         for prompt in prompts:
             chat_completion = self.create_completion(prompt, "Based on the criteria above, "
                                                              "evaluate the answer and provide a final grading"
@@ -180,7 +182,7 @@ class GROQModel:
             completions.append(final_grade)
         return completions
 
-    def generate_report(self, aim_tb_grades, task_grades, number_of_tasks):
+    def generate_report(self, doc_id, aim_tb_grades, task_grades, number_of_tasks, name):
         report = {"Experiment aim": {
             "Grades": aim_tb_grades[0],
         },
@@ -199,7 +201,7 @@ class GROQModel:
                     "Grades": task_grades[i],
                 }
 
-        with open(f"{self.generating_directory}/report.json", "w") as file:
+        with open(f"{self.generating_directory}/{doc_id}_{name}_report.json", "w") as file:
             json.dump(report, file, indent=4)
 
         return report

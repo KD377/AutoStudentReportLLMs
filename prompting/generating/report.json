@@ -2,37 +2,37 @@
     "Experiment aim": {
         "Grades": {
             "points": 5,
-            "description": "The student's answer is clear, specific, and relevant to the topic. It identifies expected outcomes, connects the exercises, and demonstrates feasibility."
+            "description": "The student's aim is clear, specific, and relevant to the topic. It identifies expected outcomes, demonstrates a connection between exercises, and appears feasible given the tasks and resources."
         }
     },
     "Theoretical background": {
         "Grades": {
-            "points": 3,
-            "description": "The student demonstrated an understanding of file permissions and their effect on user access, explained user groups and file access, and mentioned file access logging. However, they did not explain the chmod commands used or provide a clear understanding of Linux system architecture."
+            "points": 5,
+            "description": "The student clearly explains the chmod commands used and demonstrates an understanding of how the permissions of each file affect user access. The student also explains the concept of user groups and how it affects file access in the context of the SecureGroup and SecureFiles directory, and explains the concept of file access logging. Lastly, the student demonstrates an understanding of the Linux system architecture."
         }
     },
     "Exercise_1": {
         "Grades": {
-            "points": 5,
-            "description": "The student has correctly created the directory and files, used the appropriate chmod commands, and set the correct permissions for all three files according to the criteria."
+            "points": 0,
+            "description": "The AI response did not contain valid JSON grading rationale."
         }
     },
     "Exercise_2": {
         "Grades": {
-            "points": 4,
-            "description": "The student correctly created a new user named 'TestUser' and added it to the 'SecureGroup'. They also configured read and write access to the 'SecureFiles' directory for the group 'SecureGroup'. The student was able to log in as 'TestUser' and attempted to modify 'file3.txt' inside the 'SecureFiles' directory, but was unsuccessful due to missing execute permissions for the group on the 'SecureFiles' directory. However, this issue was acknowledged by the student and a resolution was suggested, which would have allowed 'TestUser' to modify 'file3.txt'."
+            "points": 0,
+            "description": "The AI response did not contain valid JSON grading rationale."
         }
     },
     "Exercise_3": {
         "Grades": {
-            "points": 5,
-            "description": "The student demonstrated the ability to enable file access logging, create a log file, access 'file1.txt' from another user account, check the log file for the recorded event, and provided a clear and coherent explanation."
+            "points": 4,
+            "description": "The student was able to properly enable file access logging, create a log file, access 'file1.txt' from another user account, and check the log file for the recorded event. However, there is room for improvement in the clarity and coherence of the explanation."
         }
     },
     "Conclusions": {
         "Grades": {
-            "points": 5,
-            "description": "The student effectively restated the problem and summarized the main findings from each exercise. They interpreted the results and identified potential security risks, while also suggesting areas for future research. Limitations of the study were not explicitly mentioned, but this did not significantly detract from the overall quality of the conclusion."
+            "points": 4,
+            "description": "The student's conclusion restates the problem and summarizes the findings. However, it lacks interpretation of results, identification of potential security risks, and mention of limitations and implications for future research."
         }
     }
 }

@@ -1,3 +1,5 @@
+import os
+
 from docx import Document
 import re
 
@@ -54,7 +56,7 @@ def extract_exercises(sections, exercise_number):
     return exercises
 
 
-def read_file(file_path, patterns, number_of_exercises):
+def read_file(file_path, patterns, number_of_exercises, file_id):
     sections = split_document_into_sections(read_docx_file(file_path), patterns)
     author = sections["Author:"][0]
     exercises = extract_exercises(sections, number_of_exercises)
@@ -64,7 +66,6 @@ def read_file(file_path, patterns, number_of_exercises):
     pattern = r'Ex\. (?:[1-9]|[1-9][0-9])\.'
 
     documents = []
-
     student_answer = False
     i, j = 0, 0
     current_section = None
@@ -76,21 +77,17 @@ def read_file(file_path, patterns, number_of_exercises):
         for sentence in sentences:
             cleaned_sentence = remove_non_ascii(sentence)
             documents.append(cleaned_sentence)
-            meta = {}
+            meta = {"File_ID": file_id}  # Include file ID in metadata
 
             if sentence.strip().startswith("Student’s answer:"):
                 student_answer = True
 
-            # Check if it is Ex. num. section and atach proper meta
             if re.findall(pattern, section_name):
                 meta["Section_name"] = "3. Research:"
-
-                # Extraction of the number from the section_name
                 parts = section_name.split(".")
                 if len(parts) == 3 and parts[0] == "Ex" and parts[1].strip().isdigit():
                     number = int(parts[1].strip())
                     meta["Exercise_number"] = number
-
             else:
                 meta["Exercise_number"] = 0
                 meta["Section_name"] = section_name
@@ -108,3 +105,19 @@ def read_file(file_path, patterns, number_of_exercises):
             j += 1
             i += 1
     return documents, metadatas
+
+
+def read_all_files(folder_path, patterns, number_of_exercises):
+    all_documents = []
+    all_metadatas = []
+    files = [f for f in os.listdir(folder_path) if f.endswith('.docx')]
+
+    file_id = 0
+    for file in files:
+        file_path = os.path.join(folder_path, file)
+        document, metadata = read_file(file_path, patterns, number_of_exercises, file_id)
+        all_documents.append(document)
+        all_metadatas.append(metadata)
+        file_id += 1
+
+    return all_documents, all_metadatas
