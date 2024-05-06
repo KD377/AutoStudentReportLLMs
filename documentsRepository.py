@@ -3,9 +3,7 @@ class DocumentsRepository:
         self.collection = collection
 
     def get_title(self, file_id):
-        title = self.collection.query(
-            query_texts=["What is the title?"],
-            n_results=1,
+        title = self.collection.get(
             where={"$and": [
                 {"File_ID": {"$eq": file_id}},
                 {"Section_name": {"$eq": "Title:"}}
@@ -13,13 +11,11 @@ class DocumentsRepository:
             include=["documents"]
         )
         if title["documents"]:
-            return title["documents"][0][0][len("Title: "):]
+            return ",".join(title["documents"])[len("Title:"):].strip()
         return "Title not found"
 
     def get_author(self, file_id):
-        author = self.collection.query(
-            query_texts=["Who is the author?"],
-            n_results=1,
+        author = self.collection.get(
             where={"$and": [
                 {"File_ID": {"$eq": file_id}},
                 {"Section_name": {"$eq": "Author:"}}
@@ -27,7 +23,7 @@ class DocumentsRepository:
             include=["documents"]
         )
         if author["documents"]:
-            return author["documents"][0][0][len("Author: "):].strip()
+            return ",".join(author["documents"])[len("Author:"):].strip()
         return "Author not found"
 
     def get_task_answer(self, file_id, task_number):

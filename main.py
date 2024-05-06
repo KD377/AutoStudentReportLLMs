@@ -38,7 +38,7 @@ collection = client.get_or_create_collection(name=COLLECTION_NAME, embedding_fun
 try:
     for i, (document, metadata) in enumerate(zip(all_documents, all_metadatas)):
         collection.add(
-            ids=[f"file{i}_doc{j}" for j in range(len(document))],  # Adjusted IDs to include file identifier
+            ids=[f"file{i}_doc{j}" for j in range(len(document))],
             documents=document,
             metadatas=metadata,
         )
@@ -75,6 +75,8 @@ model = GROQModel(api_key, "./prompting", repository)
 
 for doc_id in range(len(all_documents)):
     number_of_tasks = 3
+    # title = repository.get_title(doc_id)
+    # print(title)
     # print(repository.get_author(doc_id))
     # print('BGGGGGGGGGGG', doc_id, repository.get_theoretical_background(doc_id))
     #
