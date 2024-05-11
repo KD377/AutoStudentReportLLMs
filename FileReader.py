@@ -5,6 +5,8 @@ from typing import List
 import re
 import io
 
+from database import add_student
+
 
 def read_docx_file(file_path):
     doc = Document(file_path)
@@ -150,3 +152,18 @@ async def extract_title(files: List[UploadFile] = File(...)):
     if len(set(titles)) > 1:
         raise HTTPException(status_code=400, detail="Titles are not consistent across all files.")
     return titles[0], contents
+
+
+def extract_author(contents):
+    for content in contents:
+        document = Document(io.BytesIO(content))
+        for para in document.paragraphs:
+            if para.text.startswith("Author: "):
+                author_details = para.text[len("Author: "):].split()
+                if len(author_details) >= 3:
+                    name = author_details[0]
+                    surname = author_details[1]
+                    index_number = author_details[2]
+                    add_student(index_number, name, surname)
+
+

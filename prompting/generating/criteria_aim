@@ -1,5 +1,7 @@
-1. Clarity and Specificity of Experiment Aim: The aim of the experiment should be clearly stated and specifically related to the tasks outlined in the exercises. (0 or 1 point)
-2. Relevance to the Topic: The aim should reflect the main objectives of the report, which is to analyze security aspects of file permissions and user access in Linux operating systems. (0 or 1 point)
-3. Identification of Expected Outcomes: The aim should clearly identify the expected outcomes or results of the experiment. (0 or 1 point)
-4. Connection Between Exercises: The aim should demonstrate a clear connection between the exercises, showing how they contribute to the overall objectives of the report. (0 or 1 point)
-5. Feasibility of the Aim: The aim should be realistic and feasible given the tasks and resources provided. (0 or 1 point)
+1. Clarity of the experiment aim: The aim of the experiment should be clearly stated and easily understood. (0 or 1 point)
+2. Relevance to the report title: The aim should be directly related to the report title and address security analysis of file permissions and user access in Linux operating systems. (0 or 1 point)
+3. Appropriate scenario selection: For each exercise, the aim should accurately reflect the scenario being presented and the skills being assessed. (0 or 1 point)
+4. Specificity of the aim: The aim should be specific, focused, and detailed, outlining the exact steps or outcomes expected in the exercise. (0 or 1 point)
+5. Feasibility of the aim: The aim should be achievable within the constraints of the exercise and the Linux system, and not overly complex or unrealistic. (0 or 1 point)
+
+For each requirement, the grader will assign 0 or 1 point based on whether the report meets the criterion or not. The maximum number of points for the experiment aim section is 5.

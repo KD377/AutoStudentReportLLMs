@@ -1,12 +1,13 @@
 from fastapi import APIRouter, UploadFile, File, HTTPException
 from typing import List
 from docx import Document
-from FileReader import extract_title
+import DocumentsRepository as repository
+from FileReader import extract_title, extract_author, read_file
 from database import get_title_id, add_title
 import os
 import time
 
-from grading import grade, delete_collection
+from grading import delete_collection, grade, generate_grading_criteria
 
 router = APIRouter()
 
@@ -37,6 +38,7 @@ async def upload_reports(files: List[UploadFile] = File(...)):
                                    f"allowed.")
 
     title, contents = await extract_title(files)
+    extract_author(contents)
     if get_title_id(title.strip()) is None:
         add_title(title.strip())
 
@@ -53,8 +55,12 @@ async def upload_reports(files: List[UploadFile] = File(...)):
 
 
 @router.post("/reports/topic/{topic_id}/rate")
-async def report_topic_rate(topic_id):
+async def report_topic_rate():
     delete_collection()
-    time.sleep(0.3)
     grade()
     return {"message": f"All files graded"}
+
+
+@router.post("/criteria/topic/{topic_id}/generate")
+async def generate_criteria(topic_id):
+    generate_grading_criteria(topic_id)

@@ -1,0 +1,38 @@
+{
+    "Experiment aim": {
+        "Grades": {
+            "points": 5,
+            "description": "The answer clearly states the aim of the experiment and it is directly related to security analysis of file permissions and user access in Linux operating systems. The scenario of configuring file access logging and monitoring mechanisms is accurately reflected and the aim is specific, focused, and feasible."
+        }
+    },
+    "Theoretical background": {
+        "Grades": {
+            "points": 4,
+            "description": "The student's answer explains the concept of file access logging and its relevance to monitoring and tracking file interactions within a Linux environment. The answer provides a clear understanding of user details and timestamps in relation to file access logging. However, the answer lacks a discussion on the theoretical background of Linux file permissions, chmod commands, user groups, and their relation to file permissions."
+        }
+    },
+    "Exercise_1": {
+        "Grades": {
+            "points": 5,
+            "description": "The student fully met the requirements for creating the 'SecureFiles' directory and the three text files. They also correctly set the permissions for each file, giving the owner and group the appropriate levels of access, as specified."
+        }
+    },
+    "Exercise_2": {
+        "Grades": {
+            "points": 7,
+            "description": "The student received full points for creating a new user, adding the user to a group, setting group permissions, and attempting to modify a file. They received partial credit for adding the user to the group, as the command for adding an existing user to a group was provided but it is unclear if it was executed. They received partial credit for the unsuccessful modification attempt, as they explained the result but did not provide the output of the command used to modify the file."
+        }
+    },
+    "Exercise_3": {
+        "Grades": {
+            "points": 5,
+            "description": "The student clearly explained how to enable file access logging and provided instructions to configure the log file. The student accessed the file from another account and verified the event was recorded. The log file analysis includes the time of access, user account used, and type of access. Recommendations for improvement were not provided, but the other criteria were met."
+        }
+    },
+    "Conclusions": {
+        "Grades": {
+            "points": 5,
+            "description": "The student's answer provides a clear summary of the findings, specific recommendations, acknowledges limitations, suggests future research, and is well-organized and clearly written. The answer effectively meets all the criteria and demonstrates a thorough understanding of the assignment."
+        }
+    }
+}

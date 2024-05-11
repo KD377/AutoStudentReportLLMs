@@ -22,16 +22,17 @@ class GROQModel:
         )
         return chat_completion
 
-    def generate_grading_criteria(self, documents, metadata, title, number_of_tasks):
+    def generate_grading_criteria(self, documents, metadata, title, number_of_tasks, doc_id):
         with open(self.prompt_directory + "/requirements", "r") as file:
             context = file.read()
         with open(self.prompt_directory + "/requirements_instruction", "r") as file:
             user_prompt = file.read()
 
-        tasks = self.extract_tasks(number_of_tasks)
+        tasks = self.extract_tasks(doc_id, number_of_tasks)
 
         for i in range(number_of_tasks):
-            chat_completion = self.create_completion(context.format(title, tasks["Exercise_" + str(i + 1)]), user_prompt)
+            chat_completion = self.create_completion(context.format(title, tasks["Exercise_" + str(i + 1)]),
+                                                     user_prompt)
             criteria = chat_completion.choices[0].message.content
             self.save_criteria(criteria, str(i + 1))
 
@@ -196,8 +197,11 @@ class GROQModel:
                 report["Conclusions"] = {
                     "Grades": task_grades[i],
                 }
+        data = name.split()[:3]
+        author_name, author_lastname, author_id = data
 
-        with open(f"{self.generating_directory}/{doc_id}_{name}_report.json", "w") as file:
+        with open(f"{self.generating_directory}/{doc_id}_{author_name}_{author_lastname}_{author_id}_report.json",
+                  "w") as file:
             json.dump(report, file, indent=4)
 
         return report
@@ -228,4 +232,3 @@ class GROQModel:
             chat_completion = self.create_completion(content.format(title, header, ex1, ex2, ex3), user_prompt)
             criteria = chat_completion.choices[0].message.content
             self.save_aim_tb_criteria(criteria, "/criteria_conclusion")
-

@@ -1,0 +1,38 @@
+{
+    "Experiment aim": {
+        "Grades": {
+            "points": 5,
+            "description": "The answer clearly states the experiment aim and it is easily understood. It is relevant to the report title and directly related to security analysis of file permissions and user access in Linux operating systems. The aim accurately reflects the scenario being presented and the skills being assessed. The aim is specific, focused, and detailed, outlining the exact steps or outcomes expected in the exercise. The aim is achievable within the constraints of the exercise and the Linux system, and not overly complex or unrealistic."
+        }
+    },
+    "Theoretical background": {
+        "Grades": {
+            "points": 5,
+            "description": "The answer provides a clear explanation of Linux file permissions, chmod commands, user groups, and logging and monitoring. Each explanation is relevant to the exercises and demonstrates a solid understanding of the theoretical background."
+        }
+    },
+    "Exercise_1": {
+        "Grades": {
+            "points": 4,
+            "description": "The student was able to create the 'SecureFiles' directory and the required text files. However, there were errors in setting the permissions for all three files. The permissions for 'file1.txt' and 'file3.txt' are incorrect, while 'file2.txt' has been given excessive permissions. The student's second response indicates the correct chmod commands, but they were not used in the initial answers."
+        }
+    },
+    "Exercise_2": {
+        "Grades": {
+            "points": 5,
+            "description": "The student received full points for demonstrating the creation of a new user, addition to a group, and a failed modification attempt. However, they lost 1 point because the group permissions command was incorrect, initially removing all group permissions instead of granting read and write access."
+        }
+    },
+    "Exercise_3": {
+        "Grades": {
+            "points": 5,
+            "description": "The student provided mostly correct instructions for enabling file access logging and creating a log file. Although the commands for setting permissions were incorrect, the student was able to verify and analyze the log file successfully. The student provided recommendations for improvement, demonstrating understanding of the task."
+        }
+    },
+    "Conclusions": {
+        "Grades": {
+            "points": 5,
+            "description": "The student's conclusion addresses all the criteria. It summarizes the findings, provides specific recommendations, acknowledges limitations, suggests future research, and is clear and well-organized. The student effectively emphasizes the importance of implementing appropriate file access controls for maintaining a secure Linux environment."
+        }
+    }
+}
