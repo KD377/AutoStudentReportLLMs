@@ -94,10 +94,6 @@ class GROQModel:
         for i, task in enumerate(tasks):
             criteria = self.read_criteria(i + 1)
             answer = self.repository.get_task_answer(doc_id, i + 1)
-            print("!!!!!!!!!!!CRITERIA!!!!!!!!!!!!!")
-            print(criteria)
-            print("!!!!!!!!!!!ASNWER!!!!!!!!!")
-            print(answer)
             prompt = context.format(task, criteria, answer)
             chat_completion = self.create_completion(prompt, "Based on the criteria above, "
                                                              "evaluate the answer and provide a final grading"

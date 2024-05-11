@@ -186,3 +186,24 @@ def get_grades_by_report(report_title):
         print("Error retrieving grades:", e)
         return []
 
+
+def add_title(title):
+    try:
+        conn = sqlite3.connect('database.db')
+        cursor = conn.cursor()
+
+        cursor.execute('''SELECT id FROM Titles WHERE title = ?''', (title,))
+        existing_title = cursor.fetchone()
+
+        if existing_title:
+            print("Title", title, "already exists.")
+        else:
+            cursor.execute('''INSERT INTO Titles (title) VALUES (?)''', (title,))
+            conn.commit()
+            print("Title", title, "has been added to the database.")
+
+    except sqlite3.Error as e:
+        print("Error adding title:", e)
+
+    finally:
+        conn.close()

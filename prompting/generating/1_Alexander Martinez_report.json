@@ -1,0 +1,38 @@
+{
+    "Experiment aim": {
+        "Grades": {
+            "points": 5,
+            "description": "The student's answer clearly states the experiment aim, relevant to the topic, identifies expected outcomes, demonstrates a clear connection between exercises and is feasible given the task and resources."
+        }
+    },
+    "Theoretical background": {
+        "Grades": {
+            "points": 3,
+            "description": "The student was able to explain file permissions and the chmod command, but did not explain user groups and file access in the context of the provided example, nor did they explain file access logging or provide a detailed explanation of Linux system architecture. The student showed understanding of how permissions affect user access."
+        }
+    },
+    "Exercise_1": {
+        "Grades": {
+            "points": 2,
+            "description": "The student correctly set the permissions for file1.txt and file2.txt but failed to set the correct permissions for file3.txt. They also used incorrect commands in their initial attempts for all files."
+        }
+    },
+    "Exercise_2": {
+        "Grades": {
+            "points": 6,
+            "description": "The student received full points for creating a new user, adding the user to the group, logging in as the new user, and attempting to modify the file. However, the student lost points because they did not properly grant read and write access to the group for the directory."
+        }
+    },
+    "Exercise_3": {
+        "Grades": {
+            "points": 2,
+            "description": "The student incorrectly enabled file access logging, but they created a log file and attempted to access the file from another user account. However, they accessed the log file directly without proper permissions, and the permissions they set for the log file were incorrect."
+        }
+    },
+    "Conclusions": {
+        "Grades": {
+            "points": 5,
+            "description": "The student effectively restated the purpose of the report and summarized the main findings, interpreting the results in terms of security and user access. They also mentioned limitations and provided suggestions for future research."
+        }
+    }
+}
