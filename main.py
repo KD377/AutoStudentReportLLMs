@@ -5,6 +5,8 @@ import chromadb
 from dotenv import load_dotenv
 import os
 from chromadb.utils import embedding_functions
+
+from database import create_database
 from groqmodel import GROQModel
 from fastapi import FastAPI
 from router import router
@@ -89,7 +91,7 @@ from router import router
 #     aim_tb_completion = model.grade_aim_and_tb(doc_id)
 #     report = model.generate_report(doc_id, aim_tb_completion, tasks_completion, number_of_tasks, repository.get_author(doc_id))
 #
-# # create_database()
+# create_database()
 #
 
 app = FastAPI()

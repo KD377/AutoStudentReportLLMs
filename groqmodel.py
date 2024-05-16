@@ -96,16 +96,18 @@ class GROQModel:
             criteria = self.read_criteria(i + 1)
             answer = self.repository.get_task_answer(doc_id, i + 1)
             prompt = context.format(task, criteria, answer)
-            chat_completion = self.create_completion(prompt, "Based on the criteria above, "
-                                                             "evaluate the answer and provide a final grading"
-                                                             " in JSON format as follows: "
-                                                             "{\"points\": \"X\", \"description\": \"Y\"},"
-                                                             "where X is the total points awarded and Y is a "
-                                                             "maximum 2 sentence rationale. Let your answer be "
-                                                             "only JSON without any other text")
+            json_data = None
+            while json_data is None:
+                chat_completion = self.create_completion(prompt, "Based on the criteria above, "
+                                                                 "evaluate the answer and provide a final grading"
+                                                                 " in JSON format as follows: "
+                                                                 "{\"points\": \"X\", \"description\": \"Y\"},"
+                                                                 "where X is the total points awarded and Y is a "
+                                                                 "maximum 2 sentence rationale. Let your answer be "
+                                                                 "only JSON without any other text")
 
-            response = chat_completion.choices[0].message.content
-            json_data = self.extract_json_from_response(response)
+                response = chat_completion.choices[0].message.content
+                json_data = self.extract_json_from_response(response)
 
             if json_data:
                 final_grade = {"points": int(json_data.get("points", 0)),
@@ -120,18 +122,20 @@ class GROQModel:
         criteria_c = self.read_criteria_all("/criteria_conclusion")
         answer_c = self.repository.get_conclusions(doc_id)
         prompt_c = context.format("Conclusions", criteria_c, answer_c, final_grade)
-        chat_completion = self.create_completion(prompt_c, "Based on the criteria above and grades with description"
-                                                           "for the excercises performed in the earlier part of the "
-                                                           "report, "
-                                                           "evaluate the answer and provide a final grading"
-                                                           " in JSON format as follows: "
-                                                           "{\"points\": \"X\", \"description\": \"Y\"},"
-                                                           "where X is the total points awarded and Y is a "
-                                                           "maximum 2 sentence rationale. Let your answer be "
-                                                           "only JSON without any other text")
+        json_data = None
+        while json_data is None:
+            chat_completion = self.create_completion(prompt_c, "Based on the criteria above and grades with description"
+                                                               "for the excercises performed in the earlier part of the "
+                                                               "report, "
+                                                               "evaluate the answer and provide a final grading"
+                                                               " in JSON format as follows: "
+                                                               "{\"points\": \"X\", \"description\": \"Y\"},"
+                                                               "where X is the total points awarded and Y is a "
+                                                               "maximum 2 sentence rationale. Let your answer be "
+                                                               "only JSON without any other text")
 
-        response = chat_completion.choices[0].message.content
-        json_data = self.extract_json_from_response(response)
+            response = chat_completion.choices[0].message.content
+            json_data = self.extract_json_from_response(response)
 
         if json_data:
             final_grade = {"points": int(json_data.get("points", 0)),
@@ -160,15 +164,17 @@ class GROQModel:
         prompts = [prompt_aim, prompt_tb]
 
         for prompt in prompts:
-            chat_completion = self.create_completion(prompt, "Based on the criteria above, "
-                                                             "evaluate the answer and provide a final grading"
-                                                             " in JSON format as follows: "
-                                                             "{\"points\": \"X\", \"description\": \"Y\"},"
-                                                             "where X is the total points awarded and Y is a "
-                                                             "maximum 2 sentence rationale. Let your answer be "
-                                                             "only JSON without any other text")
-            response = chat_completion.choices[0].message.content
-            json_data = self.extract_json_from_response(response)
+            json_data = None
+            while json_data is None:
+                chat_completion = self.create_completion(prompt, "Based on the criteria above, "
+                                                                 "evaluate the answer and provide a final grading"
+                                                                 " in JSON format as follows: "
+                                                                 "{\"points\": \"X\", \"description\": \"Y\"},"
+                                                                 "where X is the total points awarded and Y is a "
+                                                                 "maximum 2 sentence rationale. Let your answer be "
+                                                                 "only JSON without any other text")
+                response = chat_completion.choices[0].message.content
+                json_data = self.extract_json_from_response(response)
             if json_data:
                 final_grade = {"points": int(json_data.get("points", 0)),
                                "description": json_data.get("description", "")}
@@ -200,11 +206,22 @@ class GROQModel:
         data = name.split()[:3]
         author_name, author_lastname, author_id = data
 
-        with open(f"{self.generating_directory}/{doc_id}_{author_name}_{author_lastname}_{author_id}_report.json",
+        with open(f"prompting/reports/{doc_id}_{author_name}_{author_lastname}_{author_id}_report.json",
                   "w") as file:
             json.dump(report, file, indent=4)
 
-        return report
+        return report, author_id
+
+    def generate_summary(self, report, author_id):
+        report_string = json.dumps(report)
+        chat_completion = self.create_completion(report_string,
+                                                 "based on the report assessing the student report, construct a summary of the report in a few sentences")
+
+        response = chat_completion.choices[0].message.content
+        with open(f"prompting/summary/report_{author_id}.txt",
+                  "w") as file:
+            file.write(response)
+        return response
 
     def generate_criteria(self, title, header, ex1, ex2, ex3):
         if header == "Experiment aim":

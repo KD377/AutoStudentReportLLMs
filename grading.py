@@ -1,3 +1,4 @@
+import json
 import os
 import shutil
 
@@ -6,10 +7,11 @@ import chromadb
 from chromadb.utils import embedding_functions
 from dotenv import load_dotenv
 import FileReader as fr
+from database import add_grade
 from groqmodel import GROQModel
 
 
-def grade():
+def grade(title_id):
     os.environ["TOKENIZERS_PARALLELISM"] = "false"
     CHROMA_DATA_PATH = "chroma_data"
     EMBED_MODEL = "sentence-transformers/paraphrase-MiniLM-L6-v2"
@@ -50,8 +52,12 @@ def grade():
         number_of_tasks = 3
         tasks_completion = model.grade_tasks(file_id)
         aim_tb_completion = model.grade_aim_and_tb(file_id)
-        report = model.generate_report(file_id, aim_tb_completion, tasks_completion, number_of_tasks,
-                                       repo.get_author(file_id))
+        report, author_id = model.generate_report(file_id, aim_tb_completion, tasks_completion, number_of_tasks,
+                                                  repo.get_author(file_id))
+        summary = model.generate_summary(report, author_id)
+        total_points, max_total_points, final_grade = count_points("./prompting/reports/", author_id)
+        doc = fr.read_docx_file(f"{folder_path}report_{title_id}_{author_id}.docx")
+        add_grade(title_id, total_points, max_total_points, final_grade, author_id, report, summary, doc)
         file_id += 1
 
 
@@ -86,7 +92,8 @@ def generate_grading_criteria(title_id):
         model_name=EMBED_MODEL
     )
 
-    document, metadata = fr.read_file(f"./reports/reportsC/report_{title_id}_0.docx", section_start_pattern, 3, title_id)
+    document, metadata = fr.read_file(f"./reports/reportsC/report_{title_id}_0.docx", section_start_pattern, 3,
+                                      title_id)
     collection = client.get_or_create_collection(name=COLLECTION_NAME, embedding_function=embedding_func)
     try:
         i = 0
@@ -94,7 +101,7 @@ def generate_grading_criteria(title_id):
             ids=[f"file{i}_doc{j}" for j in range(len(document))],
             documents=document,
             metadatas=metadata,
-            )
+        )
         print("All documents and their metadata added successfully.")
     except Exception as e:
         print("Error adding documents and metadata:", e)
@@ -110,3 +117,33 @@ def generate_grading_criteria(title_id):
     model.generate_criteria(title, "Experiment aim", ex1, ex2, ex3)
     model.generate_criteria(title, "Theoretical background", ex1, ex2, ex3)
     model.generate_criteria(title, "Conclusions", ex1, ex2, ex3)
+
+
+def count_points(folder_path, author_id):
+    files = os.listdir(folder_path)
+    target_file = None
+    for file in files:
+        if file.endswith('.json') and author_id in file:
+            target_file = file
+            break
+
+    if target_file is None:
+        print(f"File with author id: {author_id} do not exist in {folder_path}")
+        return
+
+    file_path = os.path.join(folder_path, target_file)
+    with open(file_path, 'r', encoding='utf-8') as file:
+        data = json.load(file)
+
+    points = []
+    for section in data.values():
+        points.append(section["Grades"]['points'])
+
+    points = [max(0, min(point, 5)) for point in points]
+    total_points = sum(points)
+    final_grade = round(total_points / len(points), 1)
+    max_total_points = len(points) * 5
+    return total_points, max_total_points, final_grade
+
+
+

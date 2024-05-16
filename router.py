@@ -38,14 +38,14 @@ async def upload_reports(files: List[UploadFile] = File(...)):
                                    f"allowed.")
 
     title, contents = await extract_title(files)
-    extract_author(contents)
+    author_ids = extract_author(contents)
     if get_title_id(title.strip()) is None:
         add_title(title.strip())
 
     i = 0
     title_id = get_title_id(title.strip())
     for content in contents:
-        file_name = f"report_{title_id}_{i}.docx"
+        file_name = f"report_{title_id}_{author_ids[i]}.docx"
         file_path = os.path.join(UPLOAD_FOLDER, file_name)
         with open(file_path, "wb") as f:
             f.write(content)
@@ -55,9 +55,10 @@ async def upload_reports(files: List[UploadFile] = File(...)):
 
 
 @router.post("/reports/topic/{topic_id}/rate")
-async def report_topic_rate():
+async def report_topic_rate(topic_id):
     delete_collection()
-    grade()
+    grade(topic_id)
+
     return {"message": f"All files graded"}
 
 

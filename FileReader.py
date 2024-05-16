@@ -155,6 +155,7 @@ async def extract_title(files: List[UploadFile] = File(...)):
 
 
 def extract_author(contents):
+    author_ids = []
     for content in contents:
         document = Document(io.BytesIO(content))
         for para in document.paragraphs:
@@ -164,6 +165,8 @@ def extract_author(contents):
                     name = author_details[0]
                     surname = author_details[1]
                     index_number = author_details[2]
+                    author_ids.append(index_number)
                     add_student(index_number, name, surname)
+    return author_ids
 
 
