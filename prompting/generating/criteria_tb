@@ -1,9 +1,9 @@
-Grading Criteria for "Theoretical Background" Section:
+Grading criteria for the "Theoretical background" section:
 
-1. Explanation of chmod commands used: The student should clearly explain the chmod commands used to set the specified permissions for each file. (1 point)
-2. Understanding of file permissions: The student should demonstrate an understanding of how the permissions of each file affect user access. (1 point)
-3. Explanation of user groups and file access: The student should explain the concept of user groups and how it affects file access, specifically in the context of the "SecureGroup" and the "SecureFiles" directory. (1 point)
-4. Explanation of file access logging: The student should explain the concept of file access logging and how it is used to record all file access events. (1 point)
-5. Understanding of Linux system architecture: The student should demonstrate an understanding of the Linux system architecture, including the concepts of users, groups, and file permissions. (1 point)
+1. Explanation of Linux file permissions (1 point): The section clearly describes the concept of Linux file permissions and how they are used to control access to files and directories.
+2. Explanation of chmod commands (1 point): The section explains how to use chmod commands to set file permissions and demonstrates an understanding of symbolic and numeric modes.
+3. Explanation of user groups (1 point): The section describes the concept of user groups in Linux systems, how they are used to manage user access, and how they relate to file permissions.
+4. Explanation of logging and monitoring (1 point): The section explains how file access can be logged and monitored in Linux systems, and how this information can be used for security analysis.
+5. Relevance to the exercises (1 point): The theoretical background provides a solid foundation for the exercises and the concepts introduced are directly applicable to the practical tasks.
 
-Note: Each criterion is worth 1 point, making the total number of points for this section 5. In order to receive a point, the student must fulfill the requirement as described, with no exceptions. Partial points cannot be awarded.
+Note: Each requirement fulfillment can be only graded with 0 or 1 point, and the total number of points for the whole "theoretical background" section is 5.

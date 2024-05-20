@@ -28,3 +28,5 @@ def build_chroma_collection(
         documents=documents,
         metadatas=metadatas,
     )
+
+

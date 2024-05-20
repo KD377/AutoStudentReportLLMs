@@ -1,4 +1,6 @@
+import json
 import sqlite3
+
 
 def create_table_students(conn):
     cursor = conn.cursor()
@@ -79,10 +81,10 @@ def add_student(student_id, first_name, last_name):
     try:
         conn = sqlite3.connect('database.db')
         cursor = conn.cursor()
-        
+
         cursor.execute('''SELECT * FROM Students WHERE student_id = ?''', (student_id,))
         existing_student = cursor.fetchone()
-        
+
         if existing_student:
             print("Student with ID", student_id, "already exists.")
         else:
@@ -107,10 +109,11 @@ def get_title_id(title):
             cursor.execute('''INSERT INTO Titles (title) VALUES (?)''', (title,))
             conn.commit()
             return cursor.lastrowid
-        
+
     except sqlite3.Error as e:
         print("Error getting title ID:", e)
         return None
+
 
 def add_grade(title_id, total_points, max_total_points, final_grade, student_id, report, final_report, document):
     try:
@@ -122,7 +125,7 @@ def add_grade(title_id, total_points, max_total_points, final_grade, student_id,
         if not title_row:
             print("Title with the given ID does not exist.")
             return
-        
+
         cursor.execute('''SELECT student_id FROM Students WHERE student_id = ?''', (student_id,))
         student_row = cursor.fetchone()
         if not student_row:
@@ -136,18 +139,26 @@ def add_grade(title_id, total_points, max_total_points, final_grade, student_id,
         cursor.execute('''SELECT id FROM Grades WHERE title_id = ? AND student_id = ?''', (title_id, student_id))
         existing_grade = cursor.fetchone()
 
+        if isinstance(report, dict):
+            report = json.dumps(report)
+
+        if isinstance(document, list):
+            document = json.dumps(document)
+
         if existing_grade:
             cursor.execute('''UPDATE Grades SET 
                               total_points = ?, max_total_points = ?, final_grade = ?, 
                               report = ?, final_report = ?, document = ?
                               WHERE title_id = ? AND student_id = ?''',
-                           (total_points, max_total_points, final_grade, report, final_report, document, title_id, student_id))
+                           (total_points, max_total_points, final_grade, report, final_report, document, title_id,
+                            student_id))
             print("Grade has been updated successfully.")
         else:
             cursor.execute('''INSERT INTO Grades (title_id, total_points, max_total_points, final_grade,
                                                   student_id, report, final_report, document)
                               VALUES (?, ?, ?, ?, ?, ?, ?, ?)''',
-                           (title_id, total_points, max_total_points, final_grade, student_id, report, final_report, document))
+                           (title_id, total_points, max_total_points, final_grade, student_id, report, final_report,
+                            document))
             print("Grade has been added successfully.")
 
         conn.commit()
@@ -163,10 +174,10 @@ def get_grades_by_report(report_title):
     try:
         conn = sqlite3.connect('database.db')
         cursor = conn.cursor()
-        
+
         cursor.execute('''SELECT student_id, first_name, last_name FROM Students''')
         students = cursor.fetchall()
-        
+
         cursor.execute('''SELECT Students.student_id, Grades.final_grade
                           FROM Students
                           LEFT JOIN Grades ON Students.student_id = Grades.student_id
@@ -186,3 +197,24 @@ def get_grades_by_report(report_title):
         print("Error retrieving grades:", e)
         return []
 
+
+def add_title(title):
+    try:
+        conn = sqlite3.connect('database.db')
+        cursor = conn.cursor()
+
+        cursor.execute('''SELECT id FROM Titles WHERE title = ?''', (title,))
+        existing_title = cursor.fetchone()
+
+        if existing_title:
+            print("Title", title, "already exists.")
+        else:
+            cursor.execute('''INSERT INTO Titles (title) VALUES (?)''', (title,))
+            conn.commit()
+            print("Title", title, "has been added to the database.")
+
+    except sqlite3.Error as e:
+        print("Error adding title:", e)
+
+    finally:
+        conn.close()

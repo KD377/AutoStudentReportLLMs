@@ -6,3 +6,4 @@ venv/
 chroma_data/
 *chroma_data/
 .env
+database.db

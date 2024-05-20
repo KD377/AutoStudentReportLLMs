@@ -1,7 +1,11 @@
 import os
-
+from fastapi import UploadFile, File, HTTPException
 from docx import Document
+from typing import List
 import re
+import io
+
+from database import add_student
 
 
 def read_docx_file(file_path):
@@ -31,7 +35,6 @@ def split_document_into_sections(content, patterns):
         else:
             if current_section is not None and line.strip():
                 sections[current_section].append(line.strip())
-
     return sections
 
 
@@ -61,7 +64,14 @@ def read_file(file_path, patterns, number_of_exercises, file_id):
     author = sections["Author:"][0]
     exercises = extract_exercises(sections, number_of_exercises)
     del sections["3. Research:"]
-    sections.update(exercises)
+    updated_sections = {}
+    ordered_keys = ['Author:', 'Title:', '1. Experiment aim:', '2. Theoretical background:'] + sorted(
+        exercises.keys()) + ['4. Conclusions:']
+    for key in ordered_keys:
+        if key in sections:
+            updated_sections[key] = sections[key]
+        if key in exercises and key not in sections:
+            updated_sections[key] = exercises[key]
     metadatas = []
     pattern = r'Ex\. (?:[1-9]|[1-9][0-9])\.'
 
@@ -69,7 +79,7 @@ def read_file(file_path, patterns, number_of_exercises, file_id):
     student_answer = False
     i, j = 0, 0
     current_section = None
-    for section_name, sentences in sections.items():
+    for section_name, sentences in updated_sections.items():
         j = 0
         if section_name != current_section:
             student_answer = False
@@ -99,7 +109,6 @@ def read_file(file_path, patterns, number_of_exercises, file_id):
             meta["Global_sentence_number"] = i
             meta["Local_sentence_number"] = j
             meta["Author"] = author[len("Author: "):].strip()
-
             metadatas.append(meta)
 
             j += 1
@@ -121,3 +130,43 @@ def read_all_files(folder_path, patterns, number_of_exercises):
         file_id += 1
 
     return all_documents, all_metadatas
+
+
+async def extract_title(files: List[UploadFile] = File(...)):
+    titles = []
+    contents = []
+    for file in files:
+        content = await file.read()
+        contents.append(content)
+        document = Document(io.BytesIO(content))
+        title = None
+        for para in document.paragraphs:
+            if para.text.startswith("Title: "):
+                title = para.text[len("Title: "):]
+                break
+
+        if not title:
+            raise HTTPException(status_code=400, detail=f"No title found in {file.filename}")
+        titles.append(title)
+
+    if len(set(titles)) > 1:
+        raise HTTPException(status_code=400, detail="Titles are not consistent across all files.")
+    return titles[0], contents
+
+
+def extract_author(contents):
+    author_ids = []
+    for content in contents:
+        document = Document(io.BytesIO(content))
+        for para in document.paragraphs:
+            if para.text.startswith("Author: "):
+                author_details = para.text[len("Author: "):].split()
+                if len(author_details) >= 3:
+                    name = author_details[0]
+                    surname = author_details[1]
+                    index_number = author_details[2]
+                    author_ids.append(index_number)
+                    add_student(index_number, name, surname)
+    return author_ids
+
+
