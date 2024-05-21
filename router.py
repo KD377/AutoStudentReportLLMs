@@ -1,11 +1,9 @@
 from fastapi import APIRouter, UploadFile, File, HTTPException
 from typing import List
 from docx import Document
-import DocumentsRepository as repository
-from FileReader import extract_title, extract_author, read_file
+from FileReader import extract_title, extract_author
 from database import get_title_id, add_title
 import os
-import time
 
 from grading import delete_collection, grade, generate_grading_criteria
 
