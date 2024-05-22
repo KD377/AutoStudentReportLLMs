@@ -1,23 +1,14 @@
-// src/App.js
-import React, { useEffect, useState } from 'react';
-import api from './api';
-
+import React from 'react';
+import FileUpload from './components/FileUpload';
+import RateAndCriteria from './components/RateAndCriteria';
+import ReportSections from './components/ReportSections';
 function App() {
-  const [message, setMessage] = useState('');
-
-  useEffect(() => {
-    api.get('/')
-      .then(response => {
-        setMessage(response.data.message);
-      })
-      .catch(error => {
-        console.error('There was an error fetching the data!', error);
-      });
-  }, []);
-
   return (
     <div className="App">
-      <h1>{message}</h1>
+      <h1>Automatic student report system</h1>
+      <FileUpload topicId="1"/>
+      <RateAndCriteria topicId="1" />
+
     </div>
   );
 }

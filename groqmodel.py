@@ -35,6 +35,7 @@ class GROQModel:
                                                      user_prompt)
             criteria = chat_completion.choices[0].message.content
             self.save_criteria(criteria, str(i + 1))
+            return criteria
 
     def save_criteria(self, criteria, exercise_number):
         file_path = self.generating_directory + "/criteria_ex" + str(exercise_number)
@@ -232,6 +233,7 @@ class GROQModel:
             chat_completion = self.create_completion(content.format(title, header, ex1, ex2, ex3), user_prompt)
             criteria = chat_completion.choices[0].message.content
             self.save_aim_tb_criteria(criteria, "/criteria_aim")
+            return criteria
         elif header == "Theoretical background":
             with open(self.prompt_directory + "/tb_requirements", "r") as file:
                 content = file.read()
@@ -240,7 +242,7 @@ class GROQModel:
             chat_completion = self.create_completion(content.format(title, header, ex1, ex2, ex3), user_prompt)
             criteria = chat_completion.choices[0].message.content
             self.save_aim_tb_criteria(criteria, "/criteria_tb")
-
+            return criteria
         elif header == "Conclusions":
             with open(self.prompt_directory + "/conclusion_requirements", "r") as file:
                 content = file.read()
@@ -249,3 +251,4 @@ class GROQModel:
             chat_completion = self.create_completion(content.format(title, header, ex1, ex2, ex3), user_prompt)
             criteria = chat_completion.choices[0].message.content
             self.save_aim_tb_criteria(criteria, "/criteria_conclusion")
+            return criteria

@@ -1,7 +1,12 @@
-1. Clarity of the experiment aim: The aim of the experiment should be clearly stated and easily understood. (0 or 1 point)
-2. Relevance to the report title: The aim should be directly related to the report title and address security analysis of file permissions and user access in Linux operating systems. (0 or 1 point)
-3. Appropriate scenario selection: For each exercise, the aim should accurately reflect the scenario being presented and the skills being assessed. (0 or 1 point)
-4. Specificity of the aim: The aim should be specific, focused, and detailed, outlining the exact steps or outcomes expected in the exercise. (0 or 1 point)
-5. Feasibility of the aim: The aim should be achievable within the constraints of the exercise and the Linux system, and not overly complex or unrealistic. (0 or 1 point)
+Grading Criteria for "Experiment Aim" Section:
 
-For each requirement, the grader will assign 0 or 1 point based on whether the report meets the criterion or not. The maximum number of points for the experiment aim section is 5.
+1. Clear Statement: The aim of the experiment is clearly stated and easy to understand. (1 point)
+2. Relevance to Title: The aim of the experiment is directly related to the report title and addresses the security analysis of file permissions and user access in Linux operating systems. (1 point)
+3. Specificity: The aim of the experiment includes specific and clear instructions for each exercise. (1 point)
+	* Exercise 1: Creating a new directory and text files, and setting file permissions.
+	* Exercise 2: Creating a new user, adding the user to a group, and testing file access.
+	* Exercise 3: Enabling file access logging and monitoring.
+4. Proper Scenario Description: Each exercise scenario is described in detail and provides the necessary steps to achieve the aim of the experiment. (1 point)
+5. Identification of Outcomes: The aim of the experiment includes a clear identification of the expected outcomes for each exercise. (1 point)
+
+Note: Each criterion is worth 1 point, for a total of 5 points. A requirement is considered fulfilled if and only if it meets the criterion completely. No partial points will be awarded.

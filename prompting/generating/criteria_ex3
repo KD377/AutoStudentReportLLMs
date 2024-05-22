@@ -1,5 +1,9 @@
-1. Clear Instructions: The student must provide clear instructions on how to enable file access logging for the "SecureFiles" directory and create a log file to record all file access events. (0 or 1 point)
-2. Proper Log File Configuration: The student must configure the log file to record all file access events, including read, write, and execute permissions. (0 or 1 point)
-3. Verification of Log File: The student must access "file1.txt" from another user account and verify that the event is recorded in the log file. (0 or 1 point)
-4. Analysis of Log File: The student must provide an analysis of the log file, including the time of access, user account used, and type of access (read, write, execute). (0 or 1 point)
-5. Recommendations for Improvement: The student must provide recommendations for improving the logging and monitoring of file access in the "SecureFiles" directory. (0 or 1 point)
+Sure, here are the grading criteria for the given task:
+
+1. **Logging Enabled (1 point)**: The student must successfully enable file access logging for the "SecureFiles" directory. The log file should be created and configured correctly to record file access events.
+2. **Log File Creation (1 point)**: The student must create a log file to record all file access events. The log file should be correctly named, and the student should specify the correct location and format for the log file.
+3. **File Access (1 point)**: The student must access "file1.txt" from another user account. The student should demonstrate the ability to switch to another user account and access the file from that account.
+4. **Recorded Event (1 point)**: The student must check the log file for the recorded event. The student should be able to locate and identify the recorded event in the log file.
+5. **Log File Review (1 point)**: The student must review the log file and ensure that the recorded event corresponds to the actual file access. The student should demonstrate the ability to analyze the log file and correlate the recorded event with the actual file access.
+
+To get 1 point, the student must fulfill the requirement. To get 5 points, the student must fulfill all the requirements. The grading is pass/fail, and there are no partial points.

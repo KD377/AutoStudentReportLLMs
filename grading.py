@@ -1,6 +1,7 @@
 import json
 import os
 import shutil
+import re
 
 import DocumentsRepository as repository
 import chromadb
@@ -92,7 +93,7 @@ def generate_grading_criteria(title_id):
         model_name=EMBED_MODEL
     )
 
-    document, metadata = fr.read_file(f"./reports/reportsC/report_{title_id}_0.docx", section_start_pattern, 3,
+    document, metadata = fr.read_file(Find_First_In_File(title_id, "./reports/reportsC/"), section_start_pattern, 3,
                                       title_id)
     collection = client.get_or_create_collection(name=COLLECTION_NAME, embedding_function=embedding_func)
     try:
@@ -112,11 +113,16 @@ def generate_grading_criteria(title_id):
     ex1 = repo.get_task_description(0, 1)
     ex2 = repo.get_task_description(0, 2)
     ex3 = repo.get_task_description(0, 3)
-    print(repo.get_task_answer(0, 1))
+    #print(repo.get_task_answer(0, 1))
     model.generate_grading_criteria(document, metadata, title, 3, 0)
     model.generate_criteria(title, "Experiment aim", ex1, ex2, ex3)
     model.generate_criteria(title, "Theoretical background", ex1, ex2, ex3)
     model.generate_criteria(title, "Conclusions", ex1, ex2, ex3)
+    return model.generate_criteria(title, "Experiment aim", ex1, ex2, ex3), \
+        model.generate_criteria(title, "Theoretical background", ex1, ex2, ex3), \
+        model.generate_grading_criteria(document, metadata, title, 3, 0), \
+        model.generate_criteria(title, "Conclusions", ex1, ex2, ex3)
+
 
 
 def count_points(folder_path, author_id):
@@ -147,3 +153,12 @@ def count_points(folder_path, author_id):
 
 
 
+def Find_First_In_File(title_id, katalog):
+    wzorzec = f"report_{title_id}_\d+\.docx"
+
+    # Przejście przez wszystkie pliki w katalogu
+    for plik in os.listdir(katalog):
+        if re.match(wzorzec, plik):
+            return os.path.join(katalog, plik)
+
+    return None

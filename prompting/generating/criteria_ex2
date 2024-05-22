@@ -1,5 +1,9 @@
-1. User creation: 1 point - The report must demonstrate that a new user named "TestUser" was created on the Linux system. This can be verified by providing the output of the command used to create the user.
-2. Group addition: 1 point - The report must show that "TestUser" was added to the group named "SecureGroup". This can be demonstrated through the output of the command used to add the user to the group.
-3. Group permissions: 1 point - The "SecureGroup" must have read and write access to all files inside the "SecureFiles" directory. The report should provide the output of the command used to set the permissions and confirm that the group has the required access.
-4. Successful login and modification attempt: 1 point - The report must document the attempt to log in as "TestUser" and modify "file3.txt" inside the "SecureFiles" directory. This can be demonstrated through the output of commands such as "su" or "id" to show the logged in user, and "ls -l" to show the modification of the file, if successful.
-5. Unsuccessful modification: 1 point - If "TestUser" was unable to modify "file3.txt" because of the group permissions, the report must document the failed attempt. This can be demonstrated through the output of the command used to modify the file, and an explanation of the result.
+Sure, here are the grading criteria for the given task:
+
+1. **User Creation (1 point):** The student should be able to create a new user named "TestUser" on their Linux system. This can be verified by checking the output of the "useradd" command or by checking the "/etc/passwd" file.
+2. **Group Creation and Addition (1 point):** The student should be able to create a new group named "SecureGroup" and add "TestUser" to this group. This can be verified by checking the output of the "groupadd" and "usermod" commands or by checking the "/etc/group" file.
+3. **Directory Permissions (1 point):** The student should be able to set the appropriate permissions for the "SecureFiles" directory such that "SecureGroup" has read and write access to all files inside the directory. This can be verified by checking the output of the "ls -l" command on the directory.
+4. **File Modification Attempt (1 point):** The student should be able to log in as "TestUser" and attempt to modify "file3.txt" inside the "SecureFiles" directory. This can be verified by checking the modification timestamp of the file before and after the attempt.
+5. **Explanation of Results (1 point):** The student should provide a brief explanation of the results of their attempt to modify the file. This can include whether or not they were able to modify the file, any error messages they received, and any observations they made during the process.
+
+Each requirement fulfills one specific aspect of the task, and failure to fulfill a requirement will result in a score of 0 for that requirement. The maximum possible score for the task is 5 points.

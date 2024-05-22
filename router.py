@@ -49,7 +49,7 @@ async def upload_reports(files: List[UploadFile] = File(...)):
             f.write(content)
         i += 1
 
-    return {"message": f"Successfully uploaded {len(files)} files"}
+    return {"message": f"Successfully uploaded {len(files)} files", "title": title}
 
 
 @router.post("/reports/topic/{topic_id}/rate")
@@ -62,4 +62,14 @@ async def report_topic_rate(topic_id):
 
 @router.post("/criteria/topic/{topic_id}/generate")
 async def generate_criteria(topic_id):
-    generate_grading_criteria(topic_id)
+    aim_criteria, background_criteria, research_criteria,  conclusions_criteria = generate_grading_criteria(topic_id)
+
+    return {
+        "message": "Created grading",
+        "criteria": {
+            "aim": aim_criteria,
+            "background": background_criteria,
+            "research": research_criteria,
+            "conclusions": conclusions_criteria
+        }
+    }
