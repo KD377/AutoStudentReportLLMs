@@ -2,37 +2,37 @@
     "Experiment aim": {
         "Grades": {
             "points": 5,
-            "description": "The student's answer is clear, relevant, specific, feasible, and appropriately tied to the exercise scenario. The aim describes the objectives of the experiment well."
+            "description": "The answer clearly states the aim of the experiment and the objectives, such as exploring chmod commands, working with user groups and file access, and enabling file access logging. The scenarios, commands, and expected outcomes are mentioned, and the significance and relevance to security analysis are explained. However, proper scenario descriptions could be more detailed and specific."
         }
     },
     "Theoretical background": {
         "Grades": {
-            "points": 5,
-            "description": "The answer provides a clear explanation of Linux file permissions, chmod commands, user groups, and logging and monitoring. The relevance to the exercises is also explained. The answer demonstrates a solid understanding of the theoretical background required for the exercises."
+            "points": 8,
+            "description": "The student demonstrated a clear understanding of the chmod command, file permission levels, user groups, and file access logging. However, they did not provide practical examples as promised and did not demonstrate how to add a user to a group or how to enable file access logging for a directory and view the log file."
         }
     },
     "Exercise_1": {
         "Grades": {
-            "points": 3,
-            "description": "The student was able to create the SecureFiles directory and the text files. However, there were errors in setting the permissions for all three files. The student's provided chmod commands in the second question are correct, but they did not use them in the initial response. Therefore, only the points for creating the directory and files are awarded, totaling 3 points."
+            "points": 2,
+            "description": "The student was able to create the directory and text files as required. However, only the permissions for 'file1.txt' were set correctly, while 'file2.txt' and 'file3.txt' have incorrect permissions, resulting in 2 out of 5 points."
         }
     },
     "Exercise_2": {
         "Grades": {
-            "points": 6,
-            "description": "The student received points for creating a new user, adding the user to a group, and attempting to log in and modify a file. However, they lost points because they used an incorrect command for setting group permissions, which resulted in removing all group permissions instead of granting read and write access. The student correctly identified the issue with the write permissions for the group and provided the correct command to fix it."
+            "points": 3,
+            "description": "The student received full points for user creation, group creation and addition, and explanation of results. However, they only received partial points for directory permissions because they used an incorrect command, and no points for file modification attempt because no modification timestamp was checked."
         }
     },
     "Exercise_3": {
         "Grades": {
-            "points": 5,
-            "description": "The student provided clear instructions for enabling file access logging for the SecureFiles directory and creating a log file to record all file access events. The log file was configured to record read, write, and execute permissions. The student accessed file1.txt from another user account and verified that the event was recorded in the log file. A basic analysis of the log file was provided, along with recommendations for improving the logging and monitoring of file access in the SecureFiles directory. However, there were some minor issues with the commands used, such as the incorrect option 'rwx' for file access logging and setting read-only permissions for all users on the log file."
+            "points": 3,
+            "description": "The student was able to create a log file and access 'file1.txt' from another user account, but used an incorrect command to enable file access logging. The command used to view the log file directly without proper permissions is also incorrect. The student demonstrated the ability to switch to another user account and access the file from that account, as well as create a log file. However, the incorrect commands used for enabling file access logging, setting log file permissions, and viewing the log file result in partial points."
         }
     },
     "Conclusions": {
         "Grades": {
             "points": 5,
-            "description": "The student's conclusion is clear, well-organized, and meets all the criteria. It provides a summary of the findings, recommendations, limitations, future research, and is well-written. The student demonstrates a strong understanding of the material covered in the report."
+            "description": "The student's conclusion clearly restates the problem, summarizes the experiments, interprets the results, discusses the implications, and suggests areas for future research. Each of the five criteria for grading are met with clear and concise explanations."
         }
     }
 }

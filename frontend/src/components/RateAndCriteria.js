@@ -1,9 +1,10 @@
-// src/components/RateAndCriteria.js
-import React from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import ReportSections from './ReportSections';
+
 const RateAndCriteria = ({ topicId }) => {
+  const [criteria, setCriteria] = useState({});
+
   const handleRate = async () => {
     try {
       const response = await axios.post(`http://localhost:8000/reports/topic/${topicId}/rate`);
@@ -13,17 +14,17 @@ const RateAndCriteria = ({ topicId }) => {
     }
   };
 
-  const [criteria, setCriteria] = useState({});
   const handleGenerateCriteria = async () => {
-      const response = await axios.post(`http://localhost:8000/criteria/topic/${topicId}/generate`);
-      setCriteria(response.data.criteria);
-    }
+    const response = await axios.post(`http://localhost:8000/criteria/topic/${topicId}/generate`);
+    setCriteria(response.data.criteria);
+  };
 
   return (
-    <div>
-      <button onClick={handleRate}>Rate Documents</button>
-      <button onClick={handleGenerateCriteria}>Generate Criteria</button>
-        <ReportSections criteria={criteria} />
+    <div className="container mt-3">
+      <h2>Rate and Generate Criteria</h2>
+      <button onClick={handleRate} className="btn btn-success me-2">Rate Documents</button>
+      <button onClick={handleGenerateCriteria} className="btn btn-info">Generate Criteria</button>
+      <ReportSections criteria={criteria} />
     </div>
   );
 };

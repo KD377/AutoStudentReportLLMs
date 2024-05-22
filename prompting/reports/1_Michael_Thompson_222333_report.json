@@ -2,37 +2,37 @@
     "Experiment aim": {
         "Grades": {
             "points": 5,
-            "description": "The answer clearly states the aim of the experiment, which is to investigate the practical implications of configuring file access logging and monitoring mechanisms within a Linux system. The aim is directly related to the report title, addresses security analysis of file permissions and user access in Linux operating systems. The scenario selection is accurate and specific. The aim is also feasible as it is achievable within the constraints of the exercise and the Linux system, and not overly complex or unrealistic."
+            "description": "The answer is clear, specific, and provides a good description of the scenario and expected outcomes. The student demonstrates a clear understanding of the commands and tools required for each exercise and explains the significance and relevance of the experiments to the overall topic of security analysis of file permissions and user access in Linux operating systems."
         }
     },
     "Theoretical background": {
         "Grades": {
-            "points": 4,
-            "description": "The student's answer demonstrates an understanding of the importance of file access logging and monitoring in Linux systems. They explain the concept of logging and monitoring, and how it can be used for security analysis. However, the answer lacks the explanation of the theoretical background of Linux file permissions, chmod commands, and user groups which are relevant to the exercises, resulting in a loss of 1 point."
+            "points": 8,
+            "description": "The student demonstrated a clear understanding of the chmod command, file permission levels, and user groups. They also explained the importance of file access logging and demonstrated how to enable file access logging and view the log file. However, the student did not explain how to set file permissions for a group or provide a specific example of adding a user to a group."
         }
     },
     "Exercise_1": {
         "Grades": {
             "points": 5,
-            "description": "The student fully met all the criteria by providing the correct chmod commands and explaining the permissions of each file correctly."
+            "description": "The student set the file permissions correctly for all three files and verified them using the `ls -l` command. The specified permissions for each file match the required access for the owner, group, and others."
         }
     },
     "Exercise_2": {
         "Grades": {
-            "points": 7,
-            "description": "The student created a new user 'TestUser' and added it to the 'SecureGroup' successfully. However, the group permissions on the 'SecureFiles' directory were set to 660, which only allows the owner and group members to read and write files, not execute them. The student was able to log in as 'TestUser' and attempt to modify 'file3.txt', but failed because of the missing execute permission for the group. The criteria required read and write access for the group, but it seems that the student misunderstood it as read, write, and execute permissions."
+            "points": 4,
+            "description": "Student received full points for user creation, group creation and addition, and directory permissions. However, they only received partial credit (0.5 points) for file modification attempt and explanation of results as they did not fully explain why 'TestUser' was unable to modify 'file3.txt' and what permissions were missing."
         }
     },
     "Exercise_3": {
         "Grades": {
             "points": 5,
-            "description": "The student provided clear instructions on enabling file access logging and creating a log file. They properly configured the log file to record all file access events including read, write, and execute permissions, verified the log file by accessing 'file1.txt' from another user account, and provided an analysis of the log file. Recommendations for improvement were also included in the answer."
+            "description": "The student successfully enabled file access logging for the 'SecureFiles' directory, created a log file, accessed 'file1.txt' from another user account, and reviewed the log file to ensure that the recorded event corresponds to the actual file access."
         }
     },
     "Conclusions": {
         "Grades": {
             "points": 5,
-            "description": "The student's conclusion clearly summarizes the findings of the report, provides concrete and actionable recommendations, acknowledges limitations, suggests future research, and is well-organized and clearly written. All criteria have been met, and the conclusion is a strong end to the report."
+            "description": "The student's conclusion clearly restates the problem, summarizes the experiments, interprets the results, discusses the implications, and suggests future research"
         }
     }
 }

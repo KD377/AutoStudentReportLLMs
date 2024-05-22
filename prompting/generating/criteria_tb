@@ -1,9 +1,10 @@
-Grading criteria for the "Theoretical Background" section:
+Grading criteria for the theoretical background section:
 
-1. Explanation of chmod commands: The student should be able to explain the purpose and syntax of chmod commands used to set file permissions in Linux. (1 point)
-2. Understanding of file permissions: The student should demonstrate an understanding of file permissions, including owner, group, and others, and their respective read, write, and execute permissions. (1 point)
-3. User groups and file access: The student should be able to explain how user groups and file access work in Linux, and how to add a user to a group. (1 point)
-4. File access logging: The student should be able to explain the purpose and implementation of file access logging in Linux, and how to enable file access logging for a directory. (1 point)
-5. Log file analysis: The student should be able to analyze a log file and interpret the recorded events. (1 point)
+1. Explanation of chmod commands: The student should demonstrate an understanding of the chmod command and its usage to set file permissions. (1 point)
+2. Application of chmod commands: The student should correctly apply chmod commands to set file permissions as described in the scenario. (1 point)
+3. Explanation of user groups and file access: The student should demonstrate an understanding of user groups and how they affect file access in Linux systems. (1 point)
+4. Application of user groups and file access: The student should correctly create a new user and add them to a group, and set file permissions for the group. (1 point)
+5. Explanation of file access logging: The student should demonstrate an understanding of file access logging in Linux systems. (1 point)
+6. Application of file access logging: The student should correctly enable file access logging and check the log file for recorded events. (1 point)
 
-The maximum number of points for the "Theoretical Background" section is 5 points, with each requirement worth up to 1 point. The student must fulfill all the requirements to get the full score. The grading is binary, with 0 or 1 point awarded for each requirement based on whether the requirement is fulfilled or not. Non-integer points are not allowed.
+The theoretical background section will be graded based on these six criteria, and each criterion will be worth 1 point, for a total of 5 points. A student must fulfill all the requirements for a criterion to receive a point for that criterion.

@@ -1,14 +1,5 @@
-Sure, here are the grading criteria for the assigned task:
-
-1. Directory Creation (1 point)
-The student should be able to create a new directory named "SecureFiles" in their home directory. The created directory should have the correct name and be located in the home directory.
-2. File Creation (1 point)
-The student should be able to create three text files: "file1.txt," "file2.txt," and "file3.txt" inside the "SecureFiles" directory. The created files should have the correct names and be located inside the "SecureFiles" directory.
-3. File Permissions for file1.txt (1 point)
-The student should be able to set the correct permissions for "file1.txt" such that it is readable, writable, and executable by the owner, and readable by others. The permissions should be set using the chmod command and the correct octal notation.
-4. File Permissions for file2.txt (1 point)
-The student should be able to set the correct permissions for "file2.txt" such that it is readable and writable by the owner only. The permissions should be set using the chmod command and the correct octal notation.
-5. File Permissions for file3.txt (1 point)
-The student should be able to set the correct permissions for "file3.txt" such that it is readable, writable, and executable by the owner and the group. The permissions should be set using the chmod command and the correct octal notation.
-
-The student can obtain a maximum of 1 point for each of the above requirements, making a total of 5 points for the entire exercise. The student's solution will be graded as either 0 or 1 point for each requirement based on whether or not they have fulfilled the requirement. Partial points will not be awarded for individual requirements.
+1. Correct creation of the "SecureFiles" directory: 1 point (The directory should be located in the home directory, have the correct name and be properly created.)
+2. Proper creation of the three text files: 1 point (All three text files should be located inside the "SecureFiles" directory and have the correct names.)
+3. Correct permissions for "file1.txt": 1 point ("file1.txt" should have the correct permissions, allowing the owner to read, write, and execute, and others to read.)
+4. Correct permissions for "file2.txt": 1 point ("file2.txt" should have the correct permissions, allowing the owner to read and write, and others to have no permissions.)
+5. Correct permissions for "file3.txt": 1 point ("file3.txt" should have the correct permissions, allowing the owner and group to read, write, and execute.)

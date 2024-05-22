@@ -1,12 +1,9 @@
 Grading Criteria for "Experiment Aim" Section:
 
-1. Clear Statement: The aim of the experiment is clearly stated and easy to understand. (1 point)
-2. Relevance to Title: The aim of the experiment is directly related to the report title and addresses the security analysis of file permissions and user access in Linux operating systems. (1 point)
-3. Specificity: The aim of the experiment includes specific and clear instructions for each exercise. (1 point)
-	* Exercise 1: Creating a new directory and text files, and setting file permissions.
-	* Exercise 2: Creating a new user, adding the user to a group, and testing file access.
-	* Exercise 3: Enabling file access logging and monitoring.
-4. Proper Scenario Description: Each exercise scenario is described in detail and provides the necessary steps to achieve the aim of the experiment. (1 point)
-5. Identification of Outcomes: The aim of the experiment includes a clear identification of the expected outcomes for each exercise. (1 point)
+1. Clarity: The aim of the experiment is clearly stated and easy to understand. (1 point)
+2. Relevance: The aim of the experiment is relevant to the tasks and scenarios presented in the exercises. (1 point)
+3. Completeness: The aim of the experiment includes all the necessary steps and objectives required to complete the exercises. (1 point)
+4. Accuracy: The aim of the experiment is technically accurate and free from misconceptions. (1 point)
+5. Ambition: The aim of the experiment goes beyond the minimum requirements and demonstrates a clear effort to understand the concepts presented in the exercises. (1 point)
 
-Note: Each criterion is worth 1 point, for a total of 5 points. A requirement is considered fulfilled if and only if it meets the criterion completely. No partial points will be awarded.
+Note: Each requirement fulfillment can be only graded with 0 or 1 point. Non-integer points like 0.5 etc. are forbidden.

@@ -1,4 +1,3 @@
-// src/components/FileUpload.js
 import React, { useState } from 'react';
 import axios from 'axios';
 
@@ -17,27 +16,27 @@ const FileUpload = () => {
       formData.append('files', file);
     });
 
-      await axios.post('http://localhost:8000/reports/upload', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      }).then(response => {
-            setTitle(response.data.title);
-            console.log('Title', response.data.title);
-          })
-          .catch(error => {
-            console.error('Uplouding error:', error);
-          });
+    await axios.post('http://localhost:8000/reports/upload', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    }).then(response => {
+      setTitle(response.data.title);
+    }).catch(error => {
+      console.error('Uploading error:', error);
+    });
   };
 
   return (
-      <div>
-        <form onSubmit={handleSubmit}>
-          <input type="file" multiple onChange={handleFileChange} accept=".docx"/>
-          <button type="submit">Upload</button>
-        </form>
-          {title && <p>Uploaded Report Title: {title}</p>}
-      </div>
+    <div className="container mt-3">
+      <h2>Upload File</h2>
+      <form onSubmit={handleSubmit} className="mb-3">
+        <input type="file" multiple onChange={handleFileChange} accept=".docx" className="form-control"/>
+        <button type="submit" className="btn btn-primary mt-2">Upload</button>
+      </form>
+      {title && <div className="alert alert-success" role="alert">Report Uplouded</div>}
+      <h1>Report title: {title}</h1>
+    </div>
   );
 };
 
