@@ -1,10 +1,11 @@
-Grading criteria for the theoretical background section:
+Grading Criteria for "Theoretical Background" Section:
 
-1. Explanation of chmod commands: The student should demonstrate an understanding of the chmod command and its usage to set file permissions. (1 point)
-2. Application of chmod commands: The student should correctly apply chmod commands to set file permissions as described in the scenario. (1 point)
-3. Explanation of user groups and file access: The student should demonstrate an understanding of user groups and how they affect file access in Linux systems. (1 point)
-4. Application of user groups and file access: The student should correctly create a new user and add them to a group, and set file permissions for the group. (1 point)
-5. Explanation of file access logging: The student should demonstrate an understanding of file access logging in Linux systems. (1 point)
-6. Application of file access logging: The student should correctly enable file access logging and check the log file for recorded events. (1 point)
+1. Clear Explanation of Concepts (1 point): The theoretical background section should clearly explain basic concepts related to file permissions and user access in Linux operating systems. This includes concepts such as file ownership, file permissions, and user groups.
 
-The theoretical background section will be graded based on these six criteria, and each criterion will be worth 1 point, for a total of 5 points. A student must fulfill all the requirements for a criterion to receive a point for that criterion.
+2. Relevance to Exercises (1 point): The theoretical background section should provide a clear connection to the exercises that follow. Each exercise should be foreshadowed in the theoretical background section.
+
+3. Depth of Explanation (1 point): The theoretical background section should provide a deep enough explanation of the concepts to allow the reader to understand the exercises. This means that the explanation should go beyond a simple definition and should include some discussion of the implications of the concepts.
+
+4. Use of Examples (1 point): The theoretical background section should use examples to illustrate the concepts. This could include examples of commands or situations that demonstrate the concepts.
+
+5. Correctness of Information (1 point): The theoretical background section should provide correct information. This means that the information provided should be accurate and free of errors.

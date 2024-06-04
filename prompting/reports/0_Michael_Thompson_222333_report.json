@@ -1,0 +1,38 @@
+{
+    "Experiment aim": {
+        "Grades": {
+            "points": 5,
+            "description": "The answer clearly states the purpose, tasks, and expected outcomes of the experiment. It is relevant to the report title and provides sufficient detail to guide the experiment. Well done."
+        }
+    },
+    "Theoretical background": {
+        "Grades": {
+            "points": 5,
+            "description": "The student's answer demonstrates a clear understanding of file access logging and its importance in Linux environments. The answer is relevant to the exercises, provides a deep explanation of the concept, uses examples, and is correct. However, there is no explicit connection made between the theoretical background and the exercises, hence only 4 points out of 5 for the criterion 'Relevance to Exercises'."
+        }
+    },
+    "Exercise_1": {
+        "Grades": {
+            "points": 5,
+            "description": "The student has correctly created the SecureFiles directory and the three required text files, and has set the appropriate permission settings for each file according to the criteria. Well done!"
+        }
+    },
+    "Exercise_2": {
+        "Grades": {
+            "points": 4,
+            "description": "The student was able to create a user, create a group, add the user to the group, and set appropriate permissions on the directory. However, the student did not explain the results of their attempt to modify the file. The student was unable to modify the file because the group write permission was not set on the file itself, only on the directory."
+        }
+    },
+    "Exercise_3": {
+        "Grades": {
+            "points": 5,
+            "description": "The student successfully enabled file access logging for the 'SecureFiles' directory, created a log file for recording events, accessed 'file1.txt' from another user account, and identified the recorded event in the log file. The student also reviewed the log file and ensured that the recorded event corresponded to the actual file access."
+        }
+    },
+    "Conclusions": {
+        "Grades": {
+            "points": 4,
+            "description": "The student clearly summarized the study's purpose and main findings, interpreted the results, and acknowledged limitations. However, the concluding remarks could have been more specific in relating the findings back to the broader context of file permissions and user access in Linux operating systems."
+        }
+    }
+}

@@ -4,7 +4,8 @@ from docx import Document
 from FileReader import extract_title, extract_author
 from database import get_title_id, add_title
 import os
-
+import json
+import re
 from grading import delete_collection, grade, generate_grading_criteria
 
 router = APIRouter()
@@ -52,12 +53,48 @@ async def upload_reports(files: List[UploadFile] = File(...)):
     return {"message": f"Successfully uploaded {len(files)} files", "title": title}
 
 
+REPORTS_FOLDER = "prompting/reports/"
+SUMMARY_FOLDER = "prompting/summary/"
+
+
+def extract_index_number(file_name):
+    match = re.search(r'_(\d+)_report\.json$', file_name)
+    if match:
+        return match.group(1)
+    return None
+
+
 @router.post("/reports/topic/{topic_id}/rate")
 async def report_topic_rate(topic_id):
     delete_collection()
     grade(topic_id)
 
-    return {"message": f"All files graded"}
+    grades = []
+    index_number = None
+
+    for file_name in os.listdir(REPORTS_FOLDER):
+        if file_name.endswith('.json'):
+            file_path = os.path.join(REPORTS_FOLDER, file_name)
+            with open(file_path, 'r', encoding='utf-8') as file:
+                data = json.load(file)
+                grades.append(data)
+                index_number = extract_index_number(file_name)
+
+    if not grades:
+        raise HTTPException(status_code=404, detail="No grades found")
+
+    if not index_number:
+        raise HTTPException(status_code=404, detail="Index number not found in report filenames")
+
+    summary_file_path = os.path.join(SUMMARY_FOLDER, f"report_{index_number}.txt")
+    if not os.path.exists(summary_file_path):
+        raise HTTPException(status_code=404, detail="Summary file not found")
+
+    with open(summary_file_path, 'r', encoding='utf-8') as file:
+        summary = file.read()
+
+    print(grades)
+    return {"grades": grades, "summary": summary}
 
 
 @router.post("/criteria/topic/{topic_id}/generate")

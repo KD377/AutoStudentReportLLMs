@@ -22,7 +22,6 @@ const RateAndCriteria = ({ topicId }) => {
   return (
     <div className="container mt-3">
       <h2>Rate and Generate Criteria</h2>
-      <button onClick={handleRate} className="btn btn-success me-2">Rate Documents</button>
       <button onClick={handleGenerateCriteria} className="btn btn-info">Generate Criteria</button>
       <ReportSections criteria={criteria} />
     </div>
