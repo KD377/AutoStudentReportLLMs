@@ -1,4 +1,4 @@
-from fastapi import APIRouter, UploadFile, File, HTTPException
+from fastapi import APIRouter, UploadFile, File, HTTPException, Request
 from typing import List
 from docx import Document
 from FileReader import extract_title, extract_author
@@ -6,6 +6,7 @@ from database import get_title_id, add_title
 import os
 import json
 import re
+import time
 from grading import delete_collection, grade, generate_grading_criteria
 
 router = APIRouter()
@@ -67,6 +68,7 @@ def extract_index_number(file_name):
 @router.post("/reports/topic/{topic_id}/rate")
 async def report_topic_rate(topic_id):
     delete_collection()
+    time.sleep(3)
     grade(topic_id)
 
     grades = []
@@ -110,3 +112,29 @@ async def generate_criteria(topic_id):
             "conclusions": conclusions_criteria
         }
     }
+
+
+CRITERIA_FOLDER = "./prompting/generating/"
+
+
+@router.post("/criteria/update")
+async def update_criteria(request: Request):
+    data = await request.json()
+
+    try:
+        with open(os.path.join(CRITERIA_FOLDER, "criteria_aim"), "w") as file:
+            file.write(data.get("aim", ""))
+
+        with open(os.path.join(CRITERIA_FOLDER, "criteria_tb"), "w") as file:
+            file.write(data.get("background", ""))
+
+        with open(os.path.join(CRITERIA_FOLDER, "criteria_ex1"), "w") as file:
+            file.write(data.get("research", ""))
+
+        with open(os.path.join(CRITERIA_FOLDER, "criteria_conclusion"), "w") as file:
+            file.write(data.get("conclusions", ""))
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error updating criteria: {e}")
+
+    return {"message": "Criteria updated successfully"}

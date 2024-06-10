@@ -1,11 +1,13 @@
 Grading Criteria for "Theoretical Background" Section:
 
-1. Clear Explanation of Concepts (1 point): The theoretical background section should clearly explain basic concepts related to file permissions and user access in Linux operating systems. This includes concepts such as file ownership, file permissions, and user groups.
+1. Explanation of File Permissions (1 point): The student should clearly explain the concept of file permissions in Linux operating systems. This includes detailing the different types of permissions (read, write, execute) and who they apply to (owner, group, others).
 
-2. Relevance to Exercises (1 point): The theoretical background section should provide a clear connection to the exercises that follow. Each exercise should be foreshadowed in the theoretical background section.
+2. Understanding of chmod Commands (1 point): The student should demonstrate an understanding of how to use the chmod command to set file permissions. This includes using symbolic notation (e.g. u=rwx, g=rx, o=r) and octal notation (e.g. 755, 640).
 
-3. Depth of Explanation (1 point): The theoretical background section should provide a deep enough explanation of the concepts to allow the reader to understand the exercises. This means that the explanation should go beyond a simple definition and should include some discussion of the implications of the concepts.
+3. Explanation of User Groups (1 point): The student should explain the concept of user groups in Linux operating systems and how they can be used to manage file access.
 
-4. Use of Examples (1 point): The theoretical background section should use examples to illustrate the concepts. This could include examples of commands or situations that demonstrate the concepts.
+4. Implementation of User Groups (1 point): The student should demonstrate their ability to create a new user and add them to a group, and ensure that the group has the required access to files.
 
-5. Correctness of Information (1 point): The theoretical background section should provide correct information. This means that the information provided should be accurate and free of errors.
+5. Explanation of Logging and Monitoring (1 point): The student should explain the importance of logging and monitoring file access in Linux operating systems and how it can be enabled.
+
+Note: Each criterion can earn a maximum of 1 point, with a total of 5 points possible for the "Theoretical Background" section. To earn points, the student's response must demonstrate a clear understanding of the concept or task, with accurate and complete information. Any response that does not meet these criteria will receive 0 points. Non-integer points are not allowed.

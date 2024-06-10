@@ -1,11 +1,5 @@
-Sure, here are the grading criteria for the given task:
-
-1. Correct creation of the "SecureFiles" directory in the home directory (1 point).
-2. Correct creation of three text files ("file1.txt", "file2.txt", and "file3.txt") inside the "SecureFiles" directory (1 point).
-3. Proper permission settings for "file1.txt" (readable, writable, and executable by the owner, and readable by others) (1 point).
-4. Proper permission settings for "file2.txt" (readable and writable by the owner only) (1 point).
-5. Proper permission settings for "file3.txt" (readable, writable, and executable by the owner and the group) (1 point).
-
-To earn 1 point for each requirement, students must demonstrate the correct execution of the corresponding task. If the task is not completed or executed incorrectly, no points will be awarded.
-
-Note: The maximum total score for this task is 5 points.
+1. Correct creation of the "SecureFiles" directory in the home directory (1 point)
+2. Proper creation of the three required text files "file1.txt," "file2.txt," and "file3.txt" inside the "SecureFiles" directory (1 point)
+3. Appropriate permission settings for "file1.txt": readable, writable, and executable by the owner, and readable by others (1 point)
+4. Proper permission settings for "file2.txt": readable and writable by the owner only (1 point)
+5. Correct permission settings for "file3.txt": readable, writable, and executable by the owner and the group (1 point)
