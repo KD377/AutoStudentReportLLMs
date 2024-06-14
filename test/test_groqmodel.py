@@ -1,4 +1,6 @@
+import json
 import os
+import time
 
 import pytest
 from unittest.mock import Mock, patch, mock_open
@@ -155,24 +157,52 @@ def test_full_workflow(groq_model, mock_repository):
 
 
 # performance tests
-def test_generate_grading_criteria_performance(benchmark, groq_model, mock_repository):
-    mock_repository.get_task_description.return_value = "task description"
+def test_performance_grade_tasks(groq_model, mock_repository):
+    mock_repository.get_task_description.side_effect = lambda doc_id, i: f"Task {i} description"
+    mock_repository.get_task_answer.side_effect = lambda doc_id, i: f"Answer {i}"
+
     with patch("builtins.open", mock_open(read_data="file content")):
         with patch.object(groq_model, 'create_completion',
-                          return_value=Mock(choices=[Mock(message=Mock(content="criteria"))])):
-            benchmark(groq_model.generate_grading_criteria, ["doc1"], {"meta": "data"}, "title", 1, "doc1")
+                          return_value=Mock(choices=[Mock(message=Mock(content=json.dumps({"points": 10, "description": "Good work"})))])):
+            start_time = time.time()
+            grades = groq_model.grade_tasks(doc_id="doc1")
+            end_time = time.time()
+            duration = end_time - start_time
+            print(f"grade_tasks duration: {duration:.4f} seconds")
+            assert grades is not None
+            assert duration < 3
 
 
-def test_save_criteria_performance(benchmark, groq_model):
-    with patch("builtins.open", mock_open()):
-        benchmark(groq_model.save_criteria, "criteria content", "1")
+def test_performance_generate_report(groq_model, mock_repository):
+    aim_tb_grades = [{"points": 10, "description": "Good aim"}, {"points": 8, "description": "Good background"}]
+    task_grades = [{"points": 9, "description": "Good exercise 1"}, {"points": 7, "description": "Good exercise 2"}, {"points": 6, "description": "Good exercise 3"}, {"points": 9, "description": "Good conclusion"}]
+
+    with patch("builtins.open", mock_open(read_data="file content")):
+        start_time = time.time()
+        report, author_id = groq_model.generate_report(doc_id="doc1", aim_tb_grades=aim_tb_grades, task_grades=task_grades, number_of_tasks=3, name="John Doe 123")
+        end_time = time.time()
+        duration = end_time - start_time
+        print(f"generate_report duration: {duration:.4f} seconds")
+        assert report is not None
+        assert duration < 2
 
 
-def test_extract_tasks_performance(benchmark, groq_model, mock_repository):
-    mock_repository.get_task_description.side_effect = lambda doc_id, i: f"Task {i} description"
-    benchmark(groq_model.extract_tasks, "doc1", 2)
+def test_performance_generate_summary(groq_model, mock_repository):
+    report = {"Experiment aim": {"Grades": {"points": 10, "description": "Good aim"}},
+              "Theoretical background": {"Grades": {"points": 8, "description": "Good background"}},
+              "Exercise_1": {"Grades": {"points": 9, "description": "Good exercise 1"}},
+              "Exercise_2": {"Grades": {"points": 7, "description": "Good exercise 2"}},
+              "Exercise_3": {"Grades": {"points": 6, "description": "Good exercise 3"}},
+              "Conclusions": {"Grades": {"points": 9, "description": "Good conclusion"}}}
+    author_id = "123"
 
-
-def test_read_criteria_performance(benchmark, groq_model):
-    with patch("builtins.open", mock_open(read_data="criteria content")):
-        benchmark(groq_model.read_criteria, 1)
+    with patch("builtins.open", mock_open(read_data="file content")):
+        with patch.object(groq_model, 'create_completion',
+                          return_value=Mock(choices=[Mock(message=Mock(content="summary"))])):
+            start_time = time.time()
+            summary = groq_model.generate_summary(report, author_id)
+            end_time = time.time()
+            duration = end_time - start_time
+            print(f"generate_summary duration: {duration:.4f} seconds")
+            assert summary == "summary"
+            assert duration < 1
