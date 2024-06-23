@@ -22,20 +22,23 @@ class GROQModel:
         )
         return chat_completion
 
-    def generate_grading_criteria(self, documents, metadata, title, number_of_tasks, doc_id):
+    def generate_grading_criteria(self, title, number_of_tasks, doc_id):
         with open(self.prompt_directory + "/requirements", "r") as file:
             context = file.read()
         with open(self.prompt_directory + "/requirements_instruction", "r") as file:
             user_prompt = file.read()
 
         tasks = self.extract_tasks(doc_id, number_of_tasks)
+        criteria_results = {}
 
-        for i in range(number_of_tasks):
-            chat_completion = self.create_completion(context.format(title, tasks["Exercise_" + str(i + 1)]),
-                                                     user_prompt)
+        for i in range(1, number_of_tasks + 1):
+            task_title = f"Exercise_{i}"
+            chat_completion = self.create_completion(context.format(title, tasks[task_title]), user_prompt)
             criteria = chat_completion.choices[0].message.content
-            self.save_criteria(criteria, str(i + 1))
-            return criteria
+            self.save_criteria(criteria, str(i))
+            criteria_results[task_title] = criteria
+
+        return criteria_results
 
     def save_criteria(self, criteria, exercise_number):
         file_path = self.generating_directory + "/criteria_ex" + str(exercise_number)

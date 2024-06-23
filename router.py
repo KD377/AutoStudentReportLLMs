@@ -7,6 +7,7 @@ import os
 import json
 import re
 import time
+import asyncio
 from grading import delete_collection, grade, generate_grading_criteria
 
 router = APIRouter()
@@ -64,53 +65,44 @@ def extract_index_number(file_name):
         return match.group(1)
     return None
 
+def delete_collection_sync():
+    # Assuming delete_collection is a synchronous function
+    delete_collection()
 
 @router.post("/reports/topic/{topic_id}/rate")
 async def report_topic_rate(topic_id):
-    delete_collection()
-    time.sleep(3)
+    await asyncio.to_thread(delete_collection_sync)  # Ensuring delete_collection runs synchronously
     grade(topic_id)
 
     grades = []
-    index_number = None
-
     for file_name in os.listdir(REPORTS_FOLDER):
         if file_name.endswith('.json'):
             file_path = os.path.join(REPORTS_FOLDER, file_name)
             with open(file_path, 'r', encoding='utf-8') as file:
                 data = json.load(file)
+                # Extracting the author_id from the filename assuming the format: 0_Alexander_Martinez_123321_report.json
+                author_id = file_name.split('_')[3]  # This needs to match the actual filename structure
+                summary_file_path = os.path.join(SUMMARY_FOLDER, f"report_{author_id}.txt")
+                if os.path.exists(summary_file_path):
+                    with open(summary_file_path, 'r', encoding='utf-8') as summary_file:
+                        data["Summary"] = summary_file.read()
+                else:
+                    data["Summary"] = "Summary not found."
                 grades.append(data)
-                index_number = extract_index_number(file_name)
 
     if not grades:
         raise HTTPException(status_code=404, detail="No grades found")
 
-    if not index_number:
-        raise HTTPException(status_code=404, detail="Index number not found in report filenames")
-
-    summary_file_path = os.path.join(SUMMARY_FOLDER, f"report_{index_number}.txt")
-    if not os.path.exists(summary_file_path):
-        raise HTTPException(status_code=404, detail="Summary file not found")
-
-    with open(summary_file_path, 'r', encoding='utf-8') as file:
-        summary = file.read()
-
-    print(grades)
-    return {"grades": grades, "summary": summary}
+    return {"grades": grades}
 
 
 @router.post("/criteria/topic/{topic_id}/generate")
 async def generate_criteria(topic_id):
-    aim_criteria, background_criteria, research_criteria,  conclusions_criteria = generate_grading_criteria(topic_id)
+    criteria = generate_grading_criteria(topic_id)
 
     return {
         "message": "Created grading",
-        "criteria": {
-            "aim": aim_criteria,
-            "background": background_criteria,
-            "research": research_criteria,
-            "conclusions": conclusions_criteria
-        }
+        "criteria": criteria
     }
 
 
@@ -129,7 +121,13 @@ async def update_criteria(request: Request):
             file.write(data.get("background", ""))
 
         with open(os.path.join(CRITERIA_FOLDER, "criteria_ex1"), "w") as file:
-            file.write(data.get("research", ""))
+            file.write(data.get("exercise1", ""))
+
+        with open(os.path.join(CRITERIA_FOLDER, "criteria_ex2"), "w") as file:
+            file.write(data.get("exercise2", ""))
+
+        with open(os.path.join(CRITERIA_FOLDER, "criteria_ex3"), "w") as file:
+            file.write(data.get("exercise3", ""))
 
         with open(os.path.join(CRITERIA_FOLDER, "criteria_conclusion"), "w") as file:
             file.write(data.get("conclusions", ""))

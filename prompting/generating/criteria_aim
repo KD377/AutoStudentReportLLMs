@@ -1,8 +1,9 @@
-1. Clarity: The aim of the experiment is clearly stated and easy to understand. (5 point)
-2. Relevance: The aim of the experiment is relevant to the tasks that follow and the overall topic of the report. (5 point)
-3. Specificity: The aim of the experiment is specific and includes clear details about what will be accomplished in the tasks. (5 point)
-4. Feasibility: The aim of the experiment is feasible given the resources and constraints of the report. (5 point)
-5. Outcome: The aim of the experiment clearly states the expected outcome of the tasks. (5 point)
+Experiment Aim Grading Criteria:
 
+Exercise 1:
 
-Note: The grading criteria is provided as a general guidance and can be adjusted based on the specific requirements of the task.
+1. Clear statement of the objective: The aim should clearly mention the objective of exploring chmod commands and setting permissions for the files. (1 point)
+2. Correct execution of steps: The aim should describe the steps to create the directory, files, and set permissions as specified. (1 point)
+3. Proper use of chmod commands: The aim should demonstrate the correct usage of chmod commands for setting the permissions. (1 point)
+4. Description of file permissions: The aim should clearly describe the file permissions for each file. (1 point)
+5. Justification of permissions: The aim should provide justification for the chosen permissions, such as why only the owner can read and write to "file2.txt". (1 point)

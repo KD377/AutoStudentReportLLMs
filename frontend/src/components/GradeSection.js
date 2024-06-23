@@ -3,7 +3,6 @@ import axios from 'axios';
 
 const GradeSection = () => {
   const [grades, setGrades] = useState([]);
-  const [summary, setSummary] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -14,7 +13,6 @@ const GradeSection = () => {
     try {
       const response = await axios.post('http://localhost:8000/reports/topic/1/rate');
       setGrades(response.data.grades);
-      setSummary(response.data.summary);
       setLoading(false);
     } catch (error) {
       console.error('Error fetching grades:', error);
@@ -67,15 +65,15 @@ const GradeSection = () => {
                 <h6>Conclusions</h6>
                 <p>Points: {grade.Conclusions?.Grades?.points}</p>
                 <p>{grade.Conclusions?.Grades?.description}</p>
+                {grade.Summary && (
+                  <>
+                    <h6>Summary</h6>
+                    <p>{grade.Summary}</p>
+                  </>
+                )}
               </div>
             </div>
           ))}
-          <h2>Summary</h2>
-          <div className="card mb-3">
-            <div className="card-body">
-              <p>{summary}</p>
-            </div>
-          </div>
         </>
       )}
     </div>

@@ -13,10 +13,16 @@ const ReportSections = ({ criteria, setCriteria }) => {
       <h2>2. Theoretical Background</h2>
       <textarea value={criteria.background || ''} onChange={(e) => handleInputChange(e, 'background')} className="form-control" rows="4" />
 
-      <h2>3. Research</h2>
-      <textarea value={criteria.research || ''} onChange={(e) => handleInputChange(e, 'research')} className="form-control" rows="4" />
+      <h2>3. Exercise 1</h2>
+      <textarea value={criteria.exercise1 || ''} onChange={(e) => handleInputChange(e, 'exercise1')} className="form-control" rows="4" />
 
-      <h2>4. Conclusions</h2>
+      <h2>4. Exercise 2</h2>
+      <textarea value={criteria.exercise2 || ''} onChange={(e) => handleInputChange(e, 'exercise2')} className="form-control" rows="4" />
+
+      <h2>5. Exercise 3</h2>
+      <textarea value={criteria.exercise3 || ''} onChange={(e) => handleInputChange(e, 'exercise3')} className="form-control" rows="4" />
+
+      <h2>6. Conclusions</h2>
       <textarea value={criteria.conclusions || ''} onChange={(e) => handleInputChange(e, 'conclusions')} className="form-control" rows="4" />
     </div>
   );

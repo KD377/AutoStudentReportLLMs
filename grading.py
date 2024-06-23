@@ -75,12 +75,9 @@ def delete_collection():
 def generate_grading_criteria(title_id):
     os.environ["TOKENIZERS_PARALLELISM"] = "false"
     CHROMA_DATA_PATH = "chroma_data"
-    COLLECTION_NAME = "collection_reports"
     EMBED_MODEL = "sentence-transformers/paraphrase-MiniLM-L6-v2"
+    COLLECTION_NAME = "collection_reports"
     folder_path = "./reports/reportsC/"
-    client = chromadb.PersistentClient(CHROMA_DATA_PATH)
-    load_dotenv()
-    api_key = os.getenv("GROQ_API_KEY")
     section_start_pattern = (
         "Author:",
         "Title:",
@@ -89,20 +86,22 @@ def generate_grading_criteria(title_id):
         "3. Research:",
         "4. Conclusions:"
     )
+    load_dotenv()
+    api_key = os.getenv("GROQ_API_KEY")
+
+    all_documents, all_metadatas = fr.read_all_files(folder_path, section_start_pattern, 3)
+    client = chromadb.PersistentClient(CHROMA_DATA_PATH)
     embedding_func = embedding_functions.SentenceTransformerEmbeddingFunction(
         model_name=EMBED_MODEL
     )
-
-    document, metadata = fr.read_file(Find_First_In_File(title_id, "./reports/reportsC/"), section_start_pattern, 3,
-                                      title_id)
     collection = client.get_or_create_collection(name=COLLECTION_NAME, embedding_function=embedding_func)
     try:
-        i = 0
-        collection.add(
-            ids=[f"file{i}_doc{j}" for j in range(len(document))],
-            documents=document,
-            metadatas=metadata,
-        )
+        for i, (document, metadata) in enumerate(zip(all_documents, all_metadatas)):
+            collection.add(
+                ids=[f"file{i}_doc{j}" for j in range(len(document))],
+                documents=document,
+                metadatas=metadata,
+            )
         print("All documents and their metadata added successfully.")
     except Exception as e:
         print("Error adding documents and metadata:", e)
@@ -113,16 +112,22 @@ def generate_grading_criteria(title_id):
     ex1 = repo.get_task_description(0, 1)
     ex2 = repo.get_task_description(0, 2)
     ex3 = repo.get_task_description(0, 3)
-    #print(repo.get_task_answer(0, 1))
-    model.generate_grading_criteria(document, metadata, title, 3, 0)
-    model.generate_criteria(title, "Experiment aim", ex1, ex2, ex3)
-    model.generate_criteria(title, "Theoretical background", ex1, ex2, ex3)
-    model.generate_criteria(title, "Conclusions", ex1, ex2, ex3)
-    return model.generate_criteria(title, "Experiment aim", ex1, ex2, ex3), \
-        model.generate_criteria(title, "Theoretical background", ex1, ex2, ex3), \
-        model.generate_grading_criteria(document, metadata, title, 3, 0), \
-        model.generate_criteria(title, "Conclusions", ex1, ex2, ex3)
 
+    aim_criteria = model.generate_criteria(title, "Experiment aim", ex1, ex2, ex3)
+    background_criteria = model.generate_criteria(title, "Theoretical background", ex1, ex2, ex3)
+    exercise1_criteria = model.generate_grading_criteria(title, 1, 0)["Exercise_1"]
+    exercise2_criteria = model.generate_grading_criteria(title, 2, 0)["Exercise_2"]
+    exercise3_criteria = model.generate_grading_criteria(title, 3, 0)["Exercise_3"]
+    conclusions_criteria = model.generate_criteria(title, "Conclusions", ex1, ex2, ex3)
+
+    return {
+        "aim": aim_criteria,
+        "background": background_criteria,
+        "exercise1": exercise1_criteria,
+        "exercise2": exercise2_criteria,
+        "exercise3": exercise3_criteria,
+        "conclusions": conclusions_criteria
+    }
 
 
 def count_points(folder_path, author_id):

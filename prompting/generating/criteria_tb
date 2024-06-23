@@ -1,13 +1,7 @@
-Grading Criteria for "Theoretical Background" Section:
+1. Exercise 1: Clearly explains the purpose of the chmod command and how it relates to file permissions in Linux (1 point).
+2. Exercise 1: Provides the correct chmod commands and usage to set the specified file permissions (1 point).
+3. Exercise 2: Describes the purpose of user groups in Linux and how they relate to file access (1 point).
+4. Exercise 2: Correctly explains the steps to create a new user, add them to a group, and set file permissions for that group (1 point).
+5. Exercise 3: Describes the importance of logging and monitoring file access in Linux, and explains how to enable file access logging (1 point).
 
-1. Explanation of File Permissions (1 point): The student should clearly explain the concept of file permissions in Linux operating systems. This includes detailing the different types of permissions (read, write, execute) and who they apply to (owner, group, others).
-
-2. Understanding of chmod Commands (1 point): The student should demonstrate an understanding of how to use the chmod command to set file permissions. This includes using symbolic notation (e.g. u=rwx, g=rx, o=r) and octal notation (e.g. 755, 640).
-
-3. Explanation of User Groups (1 point): The student should explain the concept of user groups in Linux operating systems and how they can be used to manage file access.
-
-4. Implementation of User Groups (1 point): The student should demonstrate their ability to create a new user and add them to a group, and ensure that the group has the required access to files.
-
-5. Explanation of Logging and Monitoring (1 point): The student should explain the importance of logging and monitoring file access in Linux operating systems and how it can be enabled.
-
-Note: Each criterion can earn a maximum of 1 point, with a total of 5 points possible for the "Theoretical Background" section. To earn points, the student's response must demonstrate a clear understanding of the concept or task, with accurate and complete information. Any response that does not meet these criteria will receive 0 points. Non-integer points are not allowed.
+Note: Each requirement must be explicitly addressed in the "Theoretical background" section in order to receive credit. A requirement will not be given credit if it is only demonstrated in the exercises, but not explained in the theoretical background.
