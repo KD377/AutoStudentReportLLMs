@@ -161,7 +161,6 @@ def count_points(folder_path, author_id):
 def Find_First_In_File(title_id, katalog):
     wzorzec = f"report_{title_id}_\d+\.docx"
 
-    # Przejście przez wszystkie pliki w katalogu
     for plik in os.listdir(katalog):
         if re.match(wzorzec, plik):
             return os.path.join(katalog, plik)

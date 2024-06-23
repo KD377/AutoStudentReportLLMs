@@ -136,3 +136,26 @@ async def update_criteria(request: Request):
         raise HTTPException(status_code=500, detail=f"Error updating criteria: {e}")
 
     return {"message": "Criteria updated successfully"}
+
+@router.delete("/reports/delete")
+async def delete_reports():
+    try:
+        for file_name in os.listdir(REPORTS_FOLDER):
+            file_path = os.path.join(REPORTS_FOLDER, file_name)
+            if os.path.isfile(file_path):
+                os.remove(file_path)
+
+        for file_name in os.listdir(SUMMARY_FOLDER):
+            file_path = os.path.join(SUMMARY_FOLDER, file_name)
+            if os.path.isfile(file_path):
+                os.remove(file_path)
+
+        for file_name in os.listdir(UPLOAD_FOLDER):
+            file_path = os.path.join(UPLOAD_FOLDER, file_name)
+            if os.path.isfile(file_path):
+                os.remove(file_path)
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error deleting reports and summaries: {e}")
+
+    return {"message": "All reports, summaries, and generated criteria have been successfully deleted"}

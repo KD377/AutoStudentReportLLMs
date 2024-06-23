@@ -21,21 +21,34 @@ const FileUpload = () => {
         'Content-Type': 'multipart/form-data'
       }
     }).then(response => {
-      setTitle(response.data.title);
-    }).catch(error => {
-      console.error('Uploading error:', error);
-    });
+          setTitle(response.data.title);
+          console.log('Title', response.data.title);
+        })
+        .catch(error => {
+          console.error('Uploading error:', error);
+        });
+  };
+
+  const handleDeleteReports = async () => {
+    try {
+      const response = await axios.delete('http://localhost:8000/reports/delete');
+      alert(response.data.message);
+    } catch (error) {
+      console.error('Error deleting reports:', error);
+      alert('Error deleting reports');
+    }
   };
 
   return (
     <div className="container mt-3">
-      <h2>Upload File</h2>
-      <form onSubmit={handleSubmit} className="mb-3">
-        <input type="file" multiple onChange={handleFileChange} accept=".docx" className="form-control"/>
-        <button type="submit" className="btn btn-primary mt-2">Upload</button>
+      <form onSubmit={handleSubmit}>
+        <div className="mb-3">
+          <input type="file" multiple onChange={handleFileChange} accept=".docx" className="form-control" />
+        </div>
+        <button type="submit" className="btn btn-primary">Upload</button>
       </form>
-      {title && <div className="alert alert-success" role="alert">Report Uplouded</div>}
-      <h1>Report title: {title}</h1>
+      {title && <p>Uploaded Report Title: {title}</p>}
+      <button onClick={handleDeleteReports} className="btn btn-danger mt-3">Delete All Reports</button>
     </div>
   );
 };
