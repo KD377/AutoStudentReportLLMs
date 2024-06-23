@@ -15,9 +15,11 @@ from FileReader import (
     extract_author
 )
 
+
 def mock_upload_file(filename: str, content: bytes) -> UploadFile:
     file_mock = UploadFile(filename=filename, file=BytesIO(content))
     return file_mock
+
 
 # Unit tests
 def test_read_docx_file():
@@ -47,7 +49,8 @@ def test_split_document_into_sections():
         "4. Conclusions:",
         "This is the conclusion."
     ]
-    patterns = ["Title:", "Author:", "1. Experiment aim:", "2. Theoretical background:", "3. Research:", "4. Conclusions:"]
+    patterns = ["Title:", "Author:", "1. Experiment aim:", "2. Theoretical background:", "3. Research:",
+                "4. Conclusions:"]
     sections = split_document_into_sections(content, patterns)
     assert "Title:" in sections
     assert "Author:" in sections
@@ -69,6 +72,7 @@ def test_extract_exercises():
     exercises = extract_exercises(sections, 2)
     assert "Ex. 1." in exercises
     assert "Ex. 2." in exercises
+
 
 # Integration tests
 @pytest.mark.asyncio
@@ -95,6 +99,7 @@ async def test_extract_title():
     assert title == "Test Title"
     assert len(contents) == 2
 
+
 def test_extract_author():
     docx_content1 = BytesIO()
     doc1 = Document()
@@ -117,9 +122,11 @@ def test_extract_author():
         assert author_ids == ["123456", "654321"]
         assert mock_add_student.call_count == 2
 
+
 def test_read_file():
     file_path = "dummy_path.docx"
-    patterns = ["Title:", "Author:", "1. Experiment aim:", "2. Theoretical background:", "3. Research:", "4. Conclusions:"]
+    patterns = ["Title:", "Author:", "1. Experiment aim:", "2. Theoretical background:", "3. Research:",
+                "4. Conclusions:"]
     number_of_exercises = 2
     file_id = 0
 
@@ -149,9 +156,11 @@ def test_read_file():
             assert len(documents) > 0
             assert len(metadatas) > 0
 
+
 def test_read_all_files():
     folder_path = "dummy_folder"
-    patterns = ["Title:", "Author:", "1. Experiment aim:", "2. Theoretical background:", "3. Research:", "4. Conclusions:"]
+    patterns = ["Title:", "Author:", "1. Experiment aim:", "2. Theoretical background:", "3. Research:",
+                "4. Conclusions:"]
     number_of_exercises = 2
 
     files = ["file1.docx", "file2.docx"]
@@ -161,10 +170,12 @@ def test_read_all_files():
             assert len(documents) == 2
             assert len(metadatas) == 2
 
+
 # performance tests
 def test_performance_read_all_files():
     folder_path = "dummy_folder"
-    patterns = ["Title:", "Author:", "1. Experiment aim:", "2. Theoretical background:", "3. Research:", "4. Conclusions:"]
+    patterns = ["Title:", "Author:", "1. Experiment aim:", "2. Theoretical background:", "3. Research:",
+                "4. Conclusions:"]
     number_of_exercises = 2
 
     files = [f"file{i}.docx" for i in range(100)]
@@ -177,4 +188,3 @@ def test_performance_read_all_files():
             assert len(documents) == 100
             assert len(metadatas) == 100
             assert duration < 5
-

@@ -4,10 +4,7 @@ from fastapi.testclient import TestClient
 from unittest.mock import Mock, patch
 from router import router, read_docx, extract_index_number
 
-
 client = TestClient(router)
-
-
 
 
 @pytest.fixture
@@ -47,6 +44,7 @@ def test_read_root():
     assert response.status_code == 200
     assert response.json() == {"message": "Hello, World!"}
 
+
 @patch('router.extract_title')
 @patch('router.extract_author')
 @patch('router.get_title_id')
@@ -57,7 +55,8 @@ def test_upload_reports(mock_add_title, mock_get_title_id, mock_extract_author, 
     mock_get_title_id.return_value = None
     mock_add_title.return_value = None
 
-    files = [('files', ('test.docx', b"dummy content", 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'))]
+    files = [('files', (
+    'test.docx', b"dummy content", 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'))]
     response = client.post("/reports/upload", files=files)
 
     assert response.status_code == 200
@@ -66,7 +65,8 @@ def test_upload_reports(mock_add_title, mock_get_title_id, mock_extract_author, 
 
 @patch('router.generate_grading_criteria')
 def test_generate_criteria(mock_generate_grading_criteria):
-    mock_generate_grading_criteria.return_value = ("aim criteria", "background criteria", "research criteria", "conclusions criteria")
+    mock_generate_grading_criteria.return_value = (
+    "aim criteria", "background criteria", "research criteria", "conclusions criteria")
 
     response = client.post("/criteria/topic/1/generate")
 
